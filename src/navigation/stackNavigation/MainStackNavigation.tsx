@@ -1,5 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import LoginScreen from '../../src/screens/LoginScreen';
+import LoginScreen from '../../screens/LoginScreen';
+
 
 export type MainStackNavigationList = {
   LoginScreen: undefined;
