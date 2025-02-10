@@ -6,7 +6,7 @@ interface ThemedTextProps {
   children: React.ReactNode;
   style?: StyleProp<TextStyle>;
   fontSize?: 'xsmall' | 'small' | 'medium'|'xmedium' | 'large';
-  fontColor?: 'primary' | 'secondary' | 'tertiory' | 'error';
+  fontColor?: 'primary' | 'secondary' | 'tertiory' | 'error'|'other';
   fontType?: 'primary' | 'secondary';
   fontStyle?: 'regular' | 'medium' | 'semiBold' | 'bold';
 }

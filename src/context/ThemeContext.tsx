@@ -33,6 +33,7 @@ type Theme = {
         primary:string,
         secondary:string,
         tertiory:string,
+        other:string
         error:string,
       }
     };
@@ -70,6 +71,7 @@ type Theme = {
         primary:"#fff",
         secondary:"#5C635D",
         tertiory:"#000",
+        other:"#F1B900",
         error:"#FA3535",
       }
     },
