@@ -75,7 +75,12 @@ const LoginScreen = () => {
         />
         <View style={style.textButtonContainer}>
           <TouchableOpacity>
-            <ThemeText fontType='secondary' fontStyle='regular' fontSize='xsmall'>Forgot Password</ThemeText>
+            <ThemeText
+              fontType="secondary"
+              fontStyle="regular"
+              fontSize="xsmall">
+              Forgot Password
+            </ThemeText>
           </TouchableOpacity>
         </View>
       </View>
@@ -95,7 +100,7 @@ const style = StyleSheet.create({
   screenContainer: {
     flex: 1,
     paddingLeft: 32,
-    paddingRight:32
+    paddingRight: 32,
   },
   topContainer: {
     display: 'flex',
@@ -112,12 +117,12 @@ const style = StyleSheet.create({
     flexDirection: 'column',
     marginTop: 160,
   },
-  textButtonContainer:{
-    marginTop:27,
-    display:"flex",
-    flexDirection:"row",
-    justifyContent:"flex-end"
-  }
+  textButtonContainer: {
+    marginTop: 27,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
 });
 
 export default LoginScreen;
