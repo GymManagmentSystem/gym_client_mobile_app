@@ -7,13 +7,21 @@ type Theme = {
       secondary: string;
       background: string;
       text: string;
+      error:string
     };
     typography: {
       fontFamiliy: string;
       fontSize: {
+          xsmall:number,
           small:number,
           medium:number,
           large:number,
+      },
+      colors:{
+        primary:string,
+        secondary:string,
+        tertiory:string,
+        error:string,
       }
     };
   };
@@ -24,13 +32,21 @@ type Theme = {
       secondary: '#F1B900',
       background: '#242525',
       text: '#000',
+      error:"red"
     },
     typography: {
       fontFamiliy: 'Poppins',
       fontSize: {
+        xsmall:13,
           small:16,
           medium:18,
           large:24
+      },
+      colors:{
+        primary:"#fff",
+        secondary:"#5C635D",
+        tertiory:"#000",
+        error:"#FA3535",
       }
     },
   };
