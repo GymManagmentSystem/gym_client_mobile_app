@@ -1,9 +1,11 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from '../../screens/LoginScreen';
+import EmailVerificationScreen from '../../screens/EmailVerificationScreen';
 
 
 export type MainStackNavigationList = {
   LoginScreen: undefined;
+  EmailVerficationScreen:undefined;
 };
 
 const MainStackNavigation = () => {
@@ -11,8 +13,9 @@ const MainStackNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="LoginScreen">
+      initialRouteName="EmailVerficationScreen">
       <Stack.Screen name="LoginScreen" component={LoginScreen}></Stack.Screen>
+      <Stack.Screen name="EmailVerficationScreen" component={EmailVerificationScreen}></Stack.Screen>
     </Stack.Navigator>
   );
 };
