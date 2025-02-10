@@ -26,6 +26,7 @@ type Theme = {
           xsmall:number,
           small:number,
           medium:number,
+          xmedium:number,
           large:number,
       },
       colors:{
@@ -59,9 +60,10 @@ type Theme = {
         }
       },
       fontSize: {
-        xsmall:13,
+          xsmall:13,
           small:16,
           medium:18,
+          xmedium:20,
           large:24
       },
       colors:{

@@ -5,7 +5,7 @@ import {useTheme} from '../context/ThemeContext';
 interface ThemedTextProps {
   children: React.ReactNode;
   style?: StyleProp<TextStyle>;
-  fontSize?: 'xsmall' | 'small' | 'medium' | 'large';
+  fontSize?: 'xsmall' | 'small' | 'medium'|'xmedium' | 'large';
   fontColor?: 'primary' | 'secondary' | 'tertiory' | 'error';
   fontType?: 'primary' | 'secondary';
   fontStyle?: 'regular' | 'medium' | 'semiBold' | 'bold';

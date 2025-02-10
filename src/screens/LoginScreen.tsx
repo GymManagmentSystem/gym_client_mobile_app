@@ -14,9 +14,10 @@ import {useNavigation} from '@react-navigation/native';
 import {MainStackNavigationList} from '../navigation/stackNavigation/MainStackNavigation';
 import {useTheme} from '../context/ThemeContext';
 import z from 'zod';
-import {Controller, useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import CustomTextInput from '../components/CustomTextInput';
+import PrimaryButton from '../components/PrimaryButton';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   MainStackNavigationList,
@@ -55,7 +56,8 @@ const LoginScreen = () => {
         style.screenContainer,
         {backgroundColor: theme.colors.background},
       ]}>
-      <ThemeText fontSize="large">Hello world</ThemeText>
+      <ThemeText fontSize="small">Hello world</ThemeText>
+
       <View>
         <CustomTextInput
           inputType="text"
@@ -74,9 +76,10 @@ const LoginScreen = () => {
         />
       </View>
 
-      <TouchableHighlight onPress={handleSubmit(onSubmit)}>
-        <Text>Click me</Text>
-      </TouchableHighlight>
+      <PrimaryButton
+        title="START YOUR FITNESS ADVENTURE"
+        onHandle={handleSubmit(onSubmit)}
+      />
     </SafeAreaView>
   );
 };
