@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import ThemeText from '../components/ThemeText';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
@@ -73,6 +73,11 @@ const LoginScreen = () => {
           error={errors.password?.message}
           isPassword={true}
         />
+        <View style={style.textButtonContainer}>
+          <TouchableOpacity>
+            <ThemeText fontType='secondary' fontStyle='regular' fontSize='xsmall'>Forgot Password</ThemeText>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={style.buttonContainer}>
@@ -90,6 +95,7 @@ const style = StyleSheet.create({
   screenContainer: {
     flex: 1,
     paddingLeft: 32,
+    paddingRight:32
   },
   topContainer: {
     display: 'flex',
@@ -106,6 +112,12 @@ const style = StyleSheet.create({
     flexDirection: 'column',
     marginTop: 160,
   },
+  textButtonContainer:{
+    marginTop:27,
+    display:"flex",
+    flexDirection:"row",
+    justifyContent:"flex-end"
+  }
 });
 
 export default LoginScreen;
