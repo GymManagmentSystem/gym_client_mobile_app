@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  Button,
-  View,
-  TouchableHighlight,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import ThemeText from '../components/ThemeText';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
@@ -56,9 +48,16 @@ const LoginScreen = () => {
         style.screenContainer,
         {backgroundColor: theme.colors.background},
       ]}>
-      <ThemeText fontSize="small">Hello world</ThemeText>
+      <View style={style.topContainer}>
+        <ThemeText fontType="primary" fontStyle="bold" fontSize="large">
+          Welcome Back !
+        </ThemeText>
+        <ThemeText fontType="primary" fontStyle="regular" fontSize="small">
+          Log into your account
+        </ThemeText>
+      </View>
 
-      <View>
+      <View style={style.inputContainer}>
         <CustomTextInput
           inputType="text"
           regName="userName"
@@ -76,10 +75,13 @@ const LoginScreen = () => {
         />
       </View>
 
-      <PrimaryButton
-        title="START YOUR FITNESS ADVENTURE"
-        onHandle={handleSubmit(onSubmit)}
-      />
+      <View style={style.buttonContainer}>
+        <PrimaryButton
+          titleFontColor="primary"
+          title="Sign In"
+          onHandle={handleSubmit(onSubmit)}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -87,6 +89,22 @@ const LoginScreen = () => {
 const style = StyleSheet.create({
   screenContainer: {
     flex: 1,
+    paddingLeft: 32,
+  },
+  topContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 45,
+  },
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 65,
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 160,
   },
 });
 

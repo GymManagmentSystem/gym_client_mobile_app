@@ -5,10 +5,11 @@ import {useTheme} from '../context/ThemeContext';
 
 interface PrimaryButtonProps {
   title: string;
+  titleFontColor:"primary"|"secondary"|"tertiory"
   onHandle: () => void;
 }
 
-const PrimaryButton = ({title,onHandle}: PrimaryButtonProps) => {
+const PrimaryButton = ({title,onHandle,titleFontColor}: PrimaryButtonProps) => {
   const theme = useTheme();
   return (
     <TouchableOpacity
@@ -18,7 +19,7 @@ const PrimaryButton = ({title,onHandle}: PrimaryButtonProps) => {
         fontType="secondary"
         fontStyle="bold"
         fontSize="small"
-        fontColor="tertiory">
+        fontColor={titleFontColor}>
         {title}
       </ThemeText>
     </TouchableOpacity>
