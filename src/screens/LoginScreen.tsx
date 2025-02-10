@@ -10,6 +10,7 @@ import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import CustomTextInput from '../components/CustomTextInput';
 import PrimaryButton from '../components/PrimaryButton';
+import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   MainStackNavigationList,
@@ -45,7 +46,7 @@ const LoginScreen = () => {
   return (
     <SafeAreaView
       style={[
-        style.screenContainer,
+        ScreenContainerStyles.container,
         {backgroundColor: theme.colors.background},
       ]}>
       <View style={style.topContainer}>
@@ -97,11 +98,6 @@ const LoginScreen = () => {
 };
 
 const style = StyleSheet.create({
-  screenContainer: {
-    flex: 1,
-    paddingLeft: 32,
-    paddingRight: 32,
-  },
   topContainer: {
     display: 'flex',
     flexDirection: 'column',
