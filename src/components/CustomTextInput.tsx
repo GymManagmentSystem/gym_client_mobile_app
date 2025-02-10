@@ -33,7 +33,7 @@ const CustomTextInput = ({
               styles.textInput,
               {
                 backgroundColor: theme.colors.primary,
-                fontFamily: theme.typography.fontFamiliy,
+                fontFamily: theme.typography.fontFamiliy.secondary.regular,
               },
             ]}
             onBlur={onBlur}

@@ -10,7 +10,18 @@ type Theme = {
       error:string
     };
     typography: {
-      fontFamiliy: string;
+      fontFamiliy: {
+        primary:{
+          regular:string,
+          medium:string,
+          semiBold:string,
+          bold:string
+        }
+        secondary:{
+          regular:string,
+          bold:string
+        }
+      },
       fontSize: {
           xsmall:number,
           small:number,
@@ -35,7 +46,18 @@ type Theme = {
       error:"red"
     },
     typography: {
-      fontFamiliy: 'Poppins',
+      fontFamiliy: {
+        primary:{
+          regular:"Poppins-Regular",
+          medium:"Poppins-Medium",
+          semiBold:"Poppins-SemiBold",
+          bold:"Poppins-Bold"
+        },
+        secondary:{
+          regular:"Lato-Regular",
+          bold:"Lato-Bold"
+        }
+      },
       fontSize: {
         xsmall:13,
           small:16,
