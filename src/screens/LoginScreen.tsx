@@ -30,7 +30,10 @@ const loginSchema = z.object({
 export type LoginSchemaType = z.infer<typeof loginSchema>;
 
 const LoginScreen = () => {
-  const [modalVisbility, setVisibility] = useState<boolean>(false);
+  const [errorModalVisbility, setErrorModalVisibility] =
+    useState<boolean>(false);
+  const [successModalVisbility, setSuccessModalVisibility] =
+    useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>('');
 
   const loginRequest = useLogin();
@@ -51,15 +54,20 @@ const LoginScreen = () => {
         if (memberType === 'New Member') {
           console.log('New Member');
         }
+        setSuccessModalVisibility(true);
+
       },
       onError: error => {
-        console.log('error is in ' + error.message);
-        setVisibility(true);
+        setErrorModalVisibility(true);
         setModalMessage(error.message);
       },
     });
-    console.log(data);
   };
+
+  const successNavigate=()=>{
+    setSuccessModalVisibility(false);
+    navigation.navigate("LoginScreen")
+  }
 
   return (
     <SafeAreaView
@@ -80,8 +88,15 @@ const LoginScreen = () => {
         <CustomModal
           modalType="error"
           message={modalMessage}
-          visibility={modalVisbility}
-          onToogleModal={() => setVisibility(false)}
+          visibility={errorModalVisbility}
+          onToogleModal={() => setErrorModalVisibility(false)}
+        />
+
+        <CustomModal
+          modalType="success"
+          message="Login Successfull"
+          visibility={successModalVisbility}
+          onToogleModal={successNavigate}
         />
       </View>
 
