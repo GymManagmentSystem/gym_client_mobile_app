@@ -1,5 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import axios, {  AxiosError } from "axios"
+import axiosInstance from '../api/AxiosInstance'
+
 
 
 interface UserCredentials{
@@ -21,7 +23,7 @@ const useLogin = () => {
     return useMutation<SuccessResponse,AxiosError<ErrorResponse>,UserCredentials>({
         mutationFn:async({userName,password}:UserCredentials)=>{
             try{
-                const {data}=await axios.post<SuccessResponse>('http://192.168.43.137:8080/api/v1/auth/token',{
+                const {data}=await axiosInstance.post<SuccessResponse>('/auth/token',{
                         userName:userName,
                         password:password,
                         userType:"MEMBER"

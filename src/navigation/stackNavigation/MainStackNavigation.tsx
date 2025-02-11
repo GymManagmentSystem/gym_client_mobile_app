@@ -11,7 +11,7 @@ export type MainStackNavigationList = {
   EmailVerficationScreen: undefined;
   OtpVerificationScreen: undefined;
   ResetPasswordScreen: undefined;
-  ChangePasswordScreen: undefined;
+  "ChangePasswordScreen": {userName:string}
   SuccessPasswordResetScreen: undefined;
 };
 

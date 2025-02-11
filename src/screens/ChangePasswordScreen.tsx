@@ -8,9 +8,8 @@ import ThemeText from '../components/ThemeText';
 import CustomTextInput from '../components/CustomTextInput';
 import PrimaryButton from '../components/PrimaryButton';
 import {z} from 'zod';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainStackNavigationList} from '../navigation/stackNavigation/MainStackNavigation';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 
@@ -36,12 +35,12 @@ const passwordSchema = z.object({
 
 type PasswordType = z.infer<typeof passwordSchema>;
 
-type resetPasswordNavigationProp = NativeStackNavigationProp<
+type ResetPasswordNavigationProp = RouteProp<
   MainStackNavigationList,
   'ChangePasswordScreen'
 >;
 
-const ChangePasswordScreen = () => {
+const ChangePasswordScreen = ({route}:{route:ResetPasswordNavigationProp}) => {
   const {
     control,
     handleSubmit,
@@ -49,12 +48,14 @@ const ChangePasswordScreen = () => {
   } = useForm<PasswordType>({
     resolver: zodResolver(passwordSchema),
   });
-
   const theme = useTheme();
-  const navigation = useNavigation<resetPasswordNavigationProp>();
+  const navigation = useNavigation();
+
+
 
   const submitDetails = (data: PasswordType) => {
-    console.log(data);
+    const {userName}=route.params
+    console.log(data,userName);
   };
 
   return (
@@ -66,7 +67,7 @@ const ChangePasswordScreen = () => {
       <View style={ForgotPasswordScreenStyles.headerConatiner}>
         <ForgotPasswordScreenHeader
           title="Reset Password"
-          navigateBack={() => console.log(navigation.navigate('LoginScreen'))}
+          navigateBack={() => navigation.goBack()}
         />
       </View>
       <View style={ForgotPasswordScreenStyles.imageContainer}>
@@ -93,6 +94,7 @@ const ChangePasswordScreen = () => {
           regName="password"
           placeHolder="Password"
           inputType="text"
+          isPassword={true}
           error={errors.password?.message}
         />
         <CustomTextInput
@@ -100,6 +102,7 @@ const ChangePasswordScreen = () => {
           regName="confirmPassword"
           placeHolder="Confirm Password"
           inputType="text"
+          isPassword={true}
           error={errors.confirmPassword?.message}
         />
       </View>
