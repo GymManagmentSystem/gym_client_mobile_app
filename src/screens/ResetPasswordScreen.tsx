@@ -61,7 +61,7 @@ const ResetPasswordScreen = () => {
     <SafeAreaView
       style={[
         ScreenContainerStyles.container,
-        {backgroundColor: theme.colors.background},
+        {backgroundColor: theme.colors.background.primary},
       ]}>
       <View style={ForgotPasswordScreenStyles.headerConatiner}>
         <ForgotPasswordScreenHeader
