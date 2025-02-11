@@ -32,12 +32,23 @@ export type LoginSchemaType = z.infer<typeof loginSchema>;
 const LoginScreen = () => {
   const [errorModalVisbility, setErrorModalVisibility] =
     useState<boolean>(false);
+
   const [successModalVisbility, setSuccessModalVisibility] =
     useState<boolean>(false);
+
+  const [
+    passwordResetSuccessModalVisbility,
+    setPasswordResetSuccessModalVisibility,
+  ] = useState<boolean>(false);
+
   const [modalMessage, setModalMessage] = useState<string>('');
 
+  const [userName,setUserName]=useState<string>("");
+
   const loginRequest = useLogin();
+
   const theme = useTheme();
+
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const {
     control,
@@ -48,14 +59,19 @@ const LoginScreen = () => {
   });
 
   const onSubmit = (data: LoginSchemaType) => {
+    setUserName(data.userName)
     loginRequest.mutate(data, {
       onSuccess: data => {
         let memberType = data.successMessage.split(':')[1].trim();
+        console.log(memberType)
         if (memberType === 'New Member') {
-          console.log('New Member');
+          setModalMessage('Reset your password at first Login');
+          setPasswordResetSuccessModalVisibility(true);
         }
-        setSuccessModalVisibility(true);
-
+        else{
+          setModalMessage('Login Succesfull');
+          setSuccessModalVisibility(true);
+        }   
       },
       onError: error => {
         setErrorModalVisibility(true);
@@ -64,10 +80,15 @@ const LoginScreen = () => {
     });
   };
 
-  const successNavigate=()=>{
+  const passwordResetSuccessNavigate = () => {
+    navigation.navigate('ChangePasswordScreen',{userName});
+    setPasswordResetSuccessModalVisibility(false);
+  };
+
+  const successNavigate = () => {
+    navigation.navigate('ResetPasswordScreen');
     setSuccessModalVisibility(false);
-    navigation.navigate("LoginScreen")
-  }
+  };
 
   return (
     <SafeAreaView
@@ -85,19 +106,27 @@ const LoginScreen = () => {
       </View>
 
       <View>
-        <CustomModal
-          modalType="error"
-          message={modalMessage}
-          visibility={errorModalVisbility}
-          onToogleModal={() => setErrorModalVisibility(false)}
-        />
+          <CustomModal
+            modalType="error"
+            message={modalMessage}
+            visibility={errorModalVisbility}
+            onClick={() => setErrorModalVisibility(false)}
+          />
 
-        <CustomModal
-          modalType="success"
-          message="Login Successfull"
-          visibility={successModalVisbility}
-          onToogleModal={successNavigate}
-        />
+          <CustomModal
+            modalType="success"
+            message={modalMessage}
+            visibility={successModalVisbility}
+            onClick={successNavigate}
+          />
+
+          <CustomModal
+            modalType="success"
+            message={modalMessage}
+            visibility={passwordResetSuccessModalVisbility}
+            onClick={passwordResetSuccessNavigate}
+          />
+
       </View>
 
       <View style={style.inputContainer}>

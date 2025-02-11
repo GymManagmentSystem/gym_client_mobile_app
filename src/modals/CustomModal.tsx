@@ -3,15 +3,19 @@ import {useTheme} from '../context/ThemeContext';
 import ThemeText from '../components/ThemeText';
 import PrimaryButton from '../components/PrimaryButton';
 
-
 interface CustomModalProps {
   message: string;
   modalType: 'error' | 'success';
-  visibility:boolean;
-  onToogleModal:()=>void
+  visibility: boolean;
+  onClick: () => void;
 }
 
-const CustomModal = ({message, modalType,visibility,onToogleModal}: CustomModalProps) => {
+const CustomModal = ({
+  message,
+  modalType,
+  visibility,
+  onClick,
+}: CustomModalProps) => {
   const theme = useTheme();
 
   return (
@@ -45,7 +49,7 @@ const CustomModal = ({message, modalType,visibility,onToogleModal}: CustomModalP
           <View style={ModalStyles.buttonContainer}>
             <PrimaryButton
               title={modalType === 'error' ? 'Try Again' : 'Continue'}
-              onHandle={onToogleModal}
+              onHandle={onClick}
               titleFontColor="primary"
               width={300}
             />
@@ -58,44 +62,44 @@ const CustomModal = ({message, modalType,visibility,onToogleModal}: CustomModalP
 
 export default CustomModal;
 
-const ModalStyles=StyleSheet.create({
-    modalPosition:{
-        flex:1,
-        justifyContent:"center",
-        alignItems:"center",
-        backgroundColor: "rgba(0, 0, 0, 0.5)"
-    },
-    container:{
-        justifyContent:"space-evenly",
-        alignContent:"center",
-        width:"100%",
-        height:250,
-        borderRadius:30
-    },
-    imageContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop:10
-      },
-      imageBox: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-      },
-      image:{
-        width:"100%",
-        height:"100%"
-      },
-      messageContainer:{
-        display:"flex",
-        justifyContent:"center",
-        alignItems:"center"
-      },
-      buttonContainer:{
-        marginTop:10,
-        display:"flex",
-        justifyContent:"center",
-        alignItems:"center"
-      }
-})
+const ModalStyles = StyleSheet.create({
+  modalPosition: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  container: {
+    justifyContent: 'space-evenly',
+    alignContent: 'center',
+    width: '100%',
+    height: 250,
+    borderRadius: 30,
+  },
+  imageContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  imageBox: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  messageContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    marginTop: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
