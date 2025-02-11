@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, SafeAreaView, View} from 'react-native';
 import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
 import {ForgotPasswordScreenStyles} from '../styles/ForgotPasswordScreenStyles';
@@ -12,6 +12,9 @@ import {MainStackNavigationList} from '../navigation/stackNavigation/MainStackNa
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
+import usePasswordReset from '../hooks/usePasswordReset';
+import CustomModal from '../modals/CustomModal';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 const passwordSchema = z.object({
   password: z
@@ -35,12 +38,17 @@ const passwordSchema = z.object({
 
 type PasswordType = z.infer<typeof passwordSchema>;
 
-type ResetPasswordNavigationProp = RouteProp<
+type ResetPasswordRouteProp = RouteProp<
   MainStackNavigationList,
   'ChangePasswordScreen'
 >;
 
-const ChangePasswordScreen = ({route}:{route:ResetPasswordNavigationProp}) => {
+type ResetPasswordNavigationProp = NativeStackNavigationProp<
+  MainStackNavigationList,
+  'ChangePasswordScreen'
+>;
+
+const ChangePasswordScreen = ({route}: {route: ResetPasswordRouteProp}) => {
   const {
     control,
     handleSubmit,
@@ -49,13 +57,46 @@ const ChangePasswordScreen = ({route}:{route:ResetPasswordNavigationProp}) => {
     resolver: zodResolver(passwordSchema),
   });
   const theme = useTheme();
-  const navigation = useNavigation();
 
+  const navigation = useNavigation<ResetPasswordNavigationProp>();
 
+  const [modalMessage, setModalMessage] = useState<string>('');
+  
+  const [errorModalVisbility, setErrorModalVisibility] =
+    useState<boolean>(false);
+
+  const [successModalVisbility, setSuccessModalVisibility] =
+    useState<boolean>(false);
+
+  const passwordResetRequest = usePasswordReset();
+
+  const successNavigate = () => {
+    setSuccessModalVisibility(false);
+    navigation.navigate('SuccessPasswordResetScreen');
+  };
 
   const submitDetails = (data: PasswordType) => {
-    const {userName}=route.params
-    console.log(data,userName);
+    if (data.password != data.confirmPassword) {
+      setModalMessage('Passwords are mismatching');
+      setErrorModalVisibility(true);
+    } else {
+      const {userName} = route.params;
+      const password = data.password;
+      passwordResetRequest.mutate(
+        {userName, password},
+        {
+          onSuccess: data => {
+            console.log(data);
+            setModalMessage(data);
+            setSuccessModalVisibility(true);
+          },
+          onError: error => {
+            setModalMessage(error.message);
+            setErrorModalVisibility(true);
+          },
+        },
+      );
+    }
   };
 
   return (
@@ -70,6 +111,23 @@ const ChangePasswordScreen = ({route}:{route:ResetPasswordNavigationProp}) => {
           navigateBack={() => navigation.goBack()}
         />
       </View>
+
+      <View>
+        <CustomModal
+          modalType="error"
+          message={modalMessage}
+          visibility={errorModalVisbility}
+          onClick={() => setErrorModalVisibility(false)}
+        />
+
+        <CustomModal
+          modalType="success"
+          message={modalMessage}
+          visibility={successModalVisbility}
+          onClick={successNavigate}
+        />
+      </View>
+
       <View style={ForgotPasswordScreenStyles.imageContainer}>
         <View style={ForgotPasswordScreenStyles.imageBox}>
           <Image source={require('../../assets/icons/forgotIcon.png')} />
