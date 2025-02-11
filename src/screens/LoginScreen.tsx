@@ -75,7 +75,7 @@ const LoginScreen = () => {
           isPassword={true}
         />
         <View style={style.textButtonContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.navigate("EmailVerficationScreen")}>
             <ThemeText
               fontType="secondary"
               fontStyle="regular"

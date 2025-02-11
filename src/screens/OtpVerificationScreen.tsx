@@ -42,6 +42,7 @@ const OtpVerificationScreen = () => {
 
   const submitDetails = (data: OtpType) => {
     console.log(data);
+    navigation.navigate("ResetPasswordScreen")
   };
 
   return (

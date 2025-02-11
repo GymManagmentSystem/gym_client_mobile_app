@@ -55,6 +55,7 @@ const ResetPasswordScreen = () => {
 
   const submitDetails=(data:PasswordType)=>{
     console.log(data)
+    navigation.navigate("SuccessPasswordResetScreen")
   }
 
   return (
