@@ -46,6 +46,7 @@ const EmailVerificationScreen = () => {
 
   const submitDetails = (data: EmailVerificationSchemaType) => {
     console.log(data);
+    navigation.navigate('OtpVerificationScreen')
   };
 
   return (
@@ -54,7 +55,7 @@ const EmailVerificationScreen = () => {
       <View style={ForgotPasswordScreenStyles.headerConatiner}>
         <ForgotPasswordScreenHeader
           title="Forgot Password"
-          navigateBack={() => console.log(navigation.navigate('LoginScreen'))}
+          navigateBack={() => navigation.navigate('LoginScreen')}
         />
       </View>
 
