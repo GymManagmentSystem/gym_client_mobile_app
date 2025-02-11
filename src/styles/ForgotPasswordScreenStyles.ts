@@ -20,7 +20,7 @@ export const ForgotPasswordScreenStyles=StyleSheet.create({
         marginTop:getHeightPercentage(53,852),
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start',
+        alignItems: 'center',
       },
       textInputConatiner: {
         marginTop:getHeightPercentage(45,852),

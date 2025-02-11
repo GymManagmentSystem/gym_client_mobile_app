@@ -9,36 +9,33 @@ interface UserCredentials{
     password:string
 }
 
-interface SuccessResponse{
-    successMessage:String,
-    token:String
-}
-
-interface ErrorResponse{
-    error:string
-}
+type SuccessResponse=string;
+type ErrorResponse=string;
 
 
-const useLogin = () => {
+
+
+const usePasswordReset = () => {
     return useMutation<SuccessResponse,AxiosError<ErrorResponse>,UserCredentials>({
         mutationFn:async({userName,password}:UserCredentials)=>{
             try{
-                const {data}=await axiosInstance.post<SuccessResponse>('/auth/token',{
+                const {data}=await axiosInstance.post<SuccessResponse>('/auth/member/reset-password',{
                         userName:userName,
                         password:password,
-                        userType:"MEMBER"
                 })
                 return data;
             }catch(e){
                 if(e instanceof AxiosError){
-                    const error=((e.response?.data) as ErrorResponse).error||"Request failed"
+                    const error=((e.response?.data.error) as ErrorResponse)||"Request failed"
+                    console.log("error is inside of if")
                     console.log(error);
                     throw new Error(error);
                 }
+                console.log("error is outside of if");
                 throw new Error("unexpected error occured")
             }
         }
     })
 }
 
-export default useLogin
+export default usePasswordReset;
