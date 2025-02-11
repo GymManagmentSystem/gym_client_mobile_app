@@ -10,6 +10,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainStackNavigationList} from '../navigation/stackNavigation/MainStackNavigation';
 import {useNavigation} from '@react-navigation/native';
 
+
 type SuccessPasswordNavigationProp = NativeStackNavigationProp<
   MainStackNavigationList,
   'SuccessPasswordResetScreen'

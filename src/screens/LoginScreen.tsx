@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import ThemeText from '../components/ThemeText';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -11,6 +11,8 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import CustomTextInput from '../components/CustomTextInput';
 import PrimaryButton from '../components/PrimaryButton';
 import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
+import useLogin from '../hooks/useLogin';
+import CustomModal from '../modals/CustomModal';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   MainStackNavigationList,
@@ -21,14 +23,17 @@ const loginSchema = z.object({
   userName: z
     .string()
     .min(2, {message: 'Name must be at least 2 characters long'}),
-  password: z
-    .string()
-    .min(8, {message: 'Password must be at least 8 characters long'}),
+  password: z.string(),
+  // .min(8, {message: 'Password must be at least 8 characters long'}),
 });
 
 export type LoginSchemaType = z.infer<typeof loginSchema>;
 
 const LoginScreen = () => {
+  const [modalVisbility, setVisibility] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>('');
+
+  const loginRequest = useLogin();
   const theme = useTheme();
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const {
@@ -40,6 +45,19 @@ const LoginScreen = () => {
   });
 
   const onSubmit = (data: LoginSchemaType) => {
+    loginRequest.mutate(data, {
+      onSuccess: data => {
+        let memberType = data.successMessage.split(':')[1].trim();
+        if (memberType === 'New Member') {
+          console.log('New Member');
+        }
+      },
+      onError: error => {
+        console.log('error is in ' + error.message);
+        setVisibility(true);
+        setModalMessage(error.message);
+      },
+    });
     console.log(data);
   };
 
@@ -56,6 +74,15 @@ const LoginScreen = () => {
         <ThemeText fontType="primary" fontStyle="regular" fontSize="small">
           Log into your account
         </ThemeText>
+      </View>
+
+      <View>
+        <CustomModal
+          modalType="error"
+          message={modalMessage}
+          visibility={modalVisbility}
+          onToogleModal={() => setVisibility(false)}
+        />
       </View>
 
       <View style={style.inputContainer}>
@@ -75,7 +102,8 @@ const LoginScreen = () => {
           isPassword={true}
         />
         <View style={style.textButtonContainer}>
-          <TouchableOpacity onPress={()=>navigation.navigate("EmailVerficationScreen")}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('EmailVerficationScreen')}>
             <ThemeText
               fontType="secondary"
               fontStyle="regular"

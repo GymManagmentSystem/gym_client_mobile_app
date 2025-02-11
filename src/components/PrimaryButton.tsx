@@ -7,13 +7,15 @@ interface PrimaryButtonProps {
   title: string;
   titleFontColor:"primary"|"secondary"|"tertiory"
   onHandle: () => void;
+  width?:number,
+  height?:number,
 }
 
-const PrimaryButton = ({title,onHandle,titleFontColor}: PrimaryButtonProps) => {
+const PrimaryButton = ({title,onHandle,titleFontColor,width=346,height=43}: PrimaryButtonProps) => {
   const theme = useTheme();
   return (
     <TouchableOpacity
-      style={[style.container, {backgroundColor: theme.colors.secondary}]}
+      style={[style.container, {backgroundColor: theme.colors.secondary,width,height}]}
       onPress={onHandle}>
       <ThemeText
         fontType="secondary"
@@ -30,8 +32,6 @@ export default PrimaryButton;
 
 const style = StyleSheet.create({
   container: {
-    width: 346,
-    height: 43,
     borderRadius: 20,
     display: 'flex',
     justifyContent: 'center',

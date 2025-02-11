@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import axios, { Axios, AxiosError } from "axios"
+import axios, {  AxiosError } from "axios"
 
 
 interface UserCredentials{
@@ -31,7 +31,7 @@ const useLogin = () => {
                 if(e instanceof AxiosError){
                     const error=((e.response?.data) as ErrorResponse).error||"Request failed"
                     console.log(error);
-                    throw e;
+                    throw new Error(error);
                 }
                 throw new Error("unexpected error occured")
             }
