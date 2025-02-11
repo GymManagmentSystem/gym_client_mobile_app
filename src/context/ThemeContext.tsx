@@ -5,7 +5,10 @@ type Theme = {
     colors: {
       primary: string;
       secondary: string;
-      background: string;
+      background: {
+        primary:string,
+        secondary:string
+      }
       text: string;
       error:string
     };
@@ -43,7 +46,10 @@ type Theme = {
     colors: {
       primary: '#fff',
       secondary: '#F1B900',
-      background: '#242525',
+      background: {
+        primary:'#242525',
+        secondary:'#535353'
+      },
       text: '#000',
       error:"red"
     },

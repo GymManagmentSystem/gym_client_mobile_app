@@ -50,7 +50,7 @@ const EmailVerificationScreen = () => {
 
   return (
     <SafeAreaView
-      style={[ScreenContainerStyles.container, {backgroundColor: theme.colors.background}]}>
+      style={[ScreenContainerStyles.container, {backgroundColor: theme.colors.background.primary}]}>
       <View style={ForgotPasswordScreenStyles.headerConatiner}>
         <ForgotPasswordScreenHeader
           title="Forgot Password"

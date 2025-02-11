@@ -47,7 +47,7 @@ const LoginScreen = () => {
     <SafeAreaView
       style={[
         ScreenContainerStyles.container,
-        {backgroundColor: theme.colors.background},
+        {backgroundColor: theme.colors.background.primary},
       ]}>
       <View style={style.topContainer}>
         <ThemeText fontType="primary" fontStyle="bold" fontSize="large">
