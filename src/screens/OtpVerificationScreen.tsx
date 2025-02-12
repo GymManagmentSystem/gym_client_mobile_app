@@ -12,8 +12,9 @@ import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainStackNavigationList} from '../navigation/stackNavigation/MainStackNavigation';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 import {getWidthPercentage} from '../utility/Dimensions';
+
 
 const otpSchema = z.object({
   otp: z
@@ -29,7 +30,12 @@ type OtpVerificationNavigationProp = NativeStackNavigationProp<
   'OtpVerificationScreen'
 >;
 
-const OtpVerificationScreen = () => {
+type OtpVerificationRouteProp = RouteProp<
+  MainStackNavigationList,
+  'OtpVerificationScreen'
+>;
+
+const OtpVerificationScreen = ({route}:{route:OtpVerificationRouteProp}) => {
   const {
     control,
     handleSubmit,
@@ -39,6 +45,11 @@ const OtpVerificationScreen = () => {
   });
   const theme = useTheme();
   const navigation = useNavigation<OtpVerificationNavigationProp>();
+  const {userName,email}=route.params
+
+  const resendOtp=()=>{
+
+  }
 
   const submitDetails = (data: OtpType) => {
     console.log(data);
@@ -68,7 +79,7 @@ const OtpVerificationScreen = () => {
           Get Your Code
         </ThemeText>
         <ThemeText fontType="primary" fontStyle="regular" fontSize="xsmall">
-          Enter the 4 digits code that you received
+          Enter the 6 digits code that you received
         </ThemeText>
         <ThemeText fontType="primary" fontStyle="regular" fontSize="xsmall">
           on your email.
