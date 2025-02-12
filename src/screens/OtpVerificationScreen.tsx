@@ -16,6 +16,8 @@ import {RouteProp, useNavigation} from '@react-navigation/native';
 import {getWidthPercentage} from '../utility/Dimensions';
 import useOtpVerifcation from '../hooks/useOtpVerification';
 import CustomModal from '../modals/CustomModal';
+import useEmailVerifcation from '../hooks/useEmailVerification';
+import LoadingActivityIndicator from '../modals/LoadingActivityIndicator';
 
 const otpSchema = z.object({
   otp: z
@@ -46,20 +48,46 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
   });
 
   const theme = useTheme();
+
   const navigation = useNavigation<OtpVerificationNavigationProp>();
+
   const otpVerification = useOtpVerifcation();
+
+  const resendingOtp = useEmailVerifcation();
+
   const [errorModalVisbility, setErrorModalVisibility] =
     useState<boolean>(false);
 
   const [successModalVisbility, setSuccessModalVisibility] =
     useState<boolean>(false);
 
-  const [modalMessage, setModalMessage] = useState<string>('');
+  const [successResendModalVisbility, setSuccessResendModalVisibility] =
+    useState<boolean>(false);
 
-  const resendOtp = () => {};
+  const [modalMessage, setModalMessage] = useState<string>('');
 
   const successNavigate = () => {
     setSuccessModalVisibility(false);
+  };
+
+  const successResendProcess = () => {
+    setSuccessResendModalVisibility(false);
+  };
+
+  const resendOtp = () => {
+    const userEmailData = route.params;
+    resendingOtp.mutate(userEmailData, {
+      onSuccess: data => {
+        console.log(data);
+        setModalMessage(data);
+        setSuccessModalVisibility(true);
+      },
+      onError: error => {
+        console.log(error.name);
+        setModalMessage(error.message);
+        setErrorModalVisibility(true);
+      },
+    });
   };
 
   const submitOtp = (data: OtpType) => {
@@ -71,11 +99,11 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
     };
     otpVerification.mutate(otpEmail, {
       onSuccess: data => {
-        setModalMessage(data)
-        setSuccessModalVisibility(true)
+        setModalMessage(data);
+        setSuccessModalVisibility(true);
       },
       onError: error => {
-        setModalMessage(error.message)
+        setModalMessage(error.message);
         setErrorModalVisibility(true);
       },
     });
@@ -100,6 +128,18 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
           message={modalMessage}
           visibility={successModalVisbility}
           onClick={successNavigate}
+        />
+
+        <CustomModal
+          modalType="success"
+          message={modalMessage}
+          visibility={successResendModalVisbility}
+          onClick={successResendProcess}
+        />
+
+        <LoadingActivityIndicator
+          title="Sending Otp..."
+          visibility={resendingOtp.isLoading}
         />
       </View>
 
@@ -150,7 +190,7 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
             fontSize="xsmall">
             If you don’t receive code!
           </ThemeText>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={resendOtp}>
             <ThemeText
               fontType="primary"
               fontStyle="regular"
