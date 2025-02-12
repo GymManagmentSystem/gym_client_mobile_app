@@ -9,7 +9,7 @@ import SuccessPasswordResetScreen from '../../screens/SuccessPasswordResetScreen
 export type MainStackNavigationList = {
   LoginScreen: undefined;
   EmailVerficationScreen: undefined;
-  OtpVerificationScreen: undefined;
+  "OtpVerificationScreen": {userName:string,email:string};
   ResetPasswordScreen: undefined;
   "ChangePasswordScreen": {userName:string}
   SuccessPasswordResetScreen: undefined;

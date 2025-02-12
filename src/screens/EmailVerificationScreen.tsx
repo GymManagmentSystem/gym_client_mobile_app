@@ -15,6 +15,7 @@ import { ScreenContainerStyles } from '../styles/ScreenContainerStyles';
 import { ForgotPasswordScreenStyles } from '../styles/ForgotPasswordScreenStyles';
 import useEmailVerifcation from '../hooks/useEmailVerification';
 import CustomModal from '../modals/CustomModal';
+import LoadingActivityIndicator from '../modals/LoadingActivityIndicator';
 
 
 
@@ -35,6 +36,8 @@ const emailVerificationSchema = z.object({
 
 type EmailVerificationSchemaType = z.infer<typeof emailVerificationSchema>;
 
+
+
 const EmailVerificationScreen = () => {
   const {
     control,
@@ -52,20 +55,29 @@ const EmailVerificationScreen = () => {
     const [successModalVisbility, setSuccessModalVisibility] =
       useState<boolean>(false);
 
+    const [userEmail,setUserEmail]=useState<{userName:string,email:string}|null>(null)  
+
+      
+
   const theme = useTheme();
   const navigation = useNavigation<EmailVerficationNavigationProp>();
   const emailVerification=useEmailVerifcation();
 
   const successNavigate=()=>{
-    navigation.navigate("OtpVerificationScreen")
+    userEmail &&(
+      navigation.navigate("OtpVerificationScreen",{userName:userEmail.userName,email:userEmail.email})
+    )
+    
   }
 
   const submitDetails = (data: EmailVerificationSchemaType) => {
+    setUserEmail({userName:data.userName,email:data.email})
     emailVerification.mutate(data,{
       onSuccess:(data)=>{
         console.log(data)
         setModalMessage(data)
         setSuccessModalVisibility(true);
+        
       },
       onError:(error)=>{
         console.log(error.name)
@@ -100,6 +112,10 @@ const EmailVerificationScreen = () => {
           visibility={successModalVisbility}
           onClick={successNavigate}
         />
+
+        <LoadingActivityIndicator
+        title='Sending Email...'
+        visibility={emailVerification.isLoading}/>
       </View>
 
       <View style={ForgotPasswordScreenStyles.imageContainer}>
