@@ -51,9 +51,9 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
 
   const navigation = useNavigation<OtpVerificationNavigationProp>();
 
-  const otpVerification = useOtpVerifcation();
+  const otpVerificationRequest = useOtpVerifcation();
 
-  const resendingOtp = useEmailVerifcation();
+  const resendingOtpRequest = useEmailVerifcation();
 
   const [errorModalVisbility, setErrorModalVisibility] =
     useState<boolean>(false);
@@ -67,7 +67,9 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
   const [modalMessage, setModalMessage] = useState<string>('');
 
   const successNavigate = () => {
+    const userEmailData = route.params;
     setSuccessModalVisibility(false);
+    navigation.navigate('ResetPasswordScreen',{userName:userEmailData.userName});
   };
 
   const successResendProcess = () => {
@@ -76,11 +78,11 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
 
   const resendOtp = () => {
     const userEmailData = route.params;
-    resendingOtp.mutate(userEmailData, {
+    resendingOtpRequest.mutate(userEmailData, {
       onSuccess: data => {
         console.log(data);
         setModalMessage(data);
-        setSuccessModalVisibility(true);
+        setSuccessResendModalVisibility(true)
       },
       onError: error => {
         console.log(error.name);
@@ -97,7 +99,7 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
       email,
       otp: data.otp,
     };
-    otpVerification.mutate(otpEmail, {
+    otpVerificationRequest.mutate(otpEmail, {
       onSuccess: data => {
         setModalMessage(data);
         setSuccessModalVisibility(true);
@@ -139,7 +141,7 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
 
         <LoadingActivityIndicator
           title="Sending Otp..."
-          visibility={resendingOtp.isLoading}
+          visibility={resendingOtpRequest.isLoading}
         />
       </View>
 
