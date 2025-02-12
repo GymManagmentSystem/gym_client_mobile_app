@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, SafeAreaView, TouchableOpacity, View} from 'react-native';
 import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
 import {useTheme} from '../context/ThemeContext';
@@ -14,7 +14,8 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainStackNavigationList} from '../navigation/stackNavigation/MainStackNavigation';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {getWidthPercentage} from '../utility/Dimensions';
-
+import useOtpVerifcation from '../hooks/useOtpVerification';
+import CustomModal from '../modals/CustomModal';
 
 const otpSchema = z.object({
   otp: z
@@ -35,7 +36,7 @@ type OtpVerificationRouteProp = RouteProp<
   'OtpVerificationScreen'
 >;
 
-const OtpVerificationScreen = ({route}:{route:OtpVerificationRouteProp}) => {
+const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
   const {
     control,
     handleSubmit,
@@ -43,17 +44,41 @@ const OtpVerificationScreen = ({route}:{route:OtpVerificationRouteProp}) => {
   } = useForm<OtpType>({
     resolver: zodResolver(otpSchema),
   });
+
   const theme = useTheme();
   const navigation = useNavigation<OtpVerificationNavigationProp>();
-  const {userName,email}=route.params
+  const otpVerification = useOtpVerifcation();
+  const [errorModalVisbility, setErrorModalVisibility] =
+    useState<boolean>(false);
 
-  const resendOtp=()=>{
+  const [successModalVisbility, setSuccessModalVisibility] =
+    useState<boolean>(false);
 
-  }
+  const [modalMessage, setModalMessage] = useState<string>('');
 
-  const submitDetails = (data: OtpType) => {
+  const resendOtp = () => {};
+
+  const successNavigate = () => {
+    setSuccessModalVisibility(false);
+  };
+
+  const submitOtp = (data: OtpType) => {
     console.log(data);
-    navigation.navigate("ResetPasswordScreen")
+    const {userName, email} = route.params;
+    const otpEmail = {
+      email,
+      otp: data.otp,
+    };
+    otpVerification.mutate(otpEmail, {
+      onSuccess: data => {
+        setModalMessage(data)
+        setSuccessModalVisibility(true)
+      },
+      onError: error => {
+        setModalMessage(error.message)
+        setErrorModalVisibility(true);
+      },
+    });
   };
 
   return (
@@ -62,6 +87,22 @@ const OtpVerificationScreen = ({route}:{route:OtpVerificationRouteProp}) => {
         ScreenContainerStyles.container,
         {backgroundColor: theme.colors.background.primary},
       ]}>
+      <View>
+        <CustomModal
+          modalType="error"
+          message={modalMessage}
+          visibility={errorModalVisbility}
+          onClick={() => setErrorModalVisibility(false)}
+        />
+
+        <CustomModal
+          modalType="success"
+          message={modalMessage}
+          visibility={successModalVisbility}
+          onClick={successNavigate}
+        />
+      </View>
+
       <View style={ForgotPasswordScreenStyles.headerConatiner}>
         <ForgotPasswordScreenHeader
           title="Email Verification"
@@ -124,7 +165,7 @@ const OtpVerificationScreen = ({route}:{route:OtpVerificationRouteProp}) => {
         <PrimaryButton
           title="Verify"
           titleFontColor="primary"
-          onHandle={handleSubmit(submitDetails)}
+          onHandle={handleSubmit(submitOtp)}
         />
       </View>
     </SafeAreaView>
