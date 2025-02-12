@@ -6,7 +6,7 @@ import axiosInstance from '../api/AxiosInstance'
 
 interface UserCredentials{
     userName:string,
-     email:string
+    email:string
 }
 
 type SuccessResponse=string;
