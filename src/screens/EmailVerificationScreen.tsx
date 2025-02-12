@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Image, SafeAreaView, StyleSheet, View} from 'react-native';
 import ForgotPasswordScreenHeader from '../components/ForgotPasswordScreenHeader';
 import {useTheme} from '../context/ThemeContext';
@@ -13,6 +13,9 @@ import CustomTextInput from '../components/CustomTextInput';
 import PrimaryButton from '../components/PrimaryButton';
 import { ScreenContainerStyles } from '../styles/ScreenContainerStyles';
 import { ForgotPasswordScreenStyles } from '../styles/ForgotPasswordScreenStyles';
+import useEmailVerifcation from '../hooks/useEmailVerification';
+import CustomModal from '../modals/CustomModal';
+
 
 
 type EmailVerficationNavigationProp = NativeStackNavigationProp<
@@ -41,12 +44,36 @@ const EmailVerificationScreen = () => {
     resolver: zodResolver(emailVerificationSchema),
   });
 
+  const [modalMessage, setModalMessage] = useState<string>('');
+    
+    const [errorModalVisbility, setErrorModalVisibility] =
+      useState<boolean>(false);
+  
+    const [successModalVisbility, setSuccessModalVisibility] =
+      useState<boolean>(false);
+
   const theme = useTheme();
   const navigation = useNavigation<EmailVerficationNavigationProp>();
+  const emailVerification=useEmailVerifcation();
+
+  const successNavigate=()=>{
+    navigation.navigate("OtpVerificationScreen")
+  }
 
   const submitDetails = (data: EmailVerificationSchemaType) => {
-    console.log(data);
-    navigation.navigate('OtpVerificationScreen')
+    emailVerification.mutate(data,{
+      onSuccess:(data)=>{
+        console.log(data)
+        setModalMessage(data)
+        setSuccessModalVisibility(true);
+      },
+      onError:(error)=>{
+        console.log(error.name)
+        setModalMessage(error.message);
+        setErrorModalVisibility(true);
+      }
+    })
+    //navigation.navigate('OtpVerificationScreen')
   };
 
   return (
@@ -56,6 +83,22 @@ const EmailVerificationScreen = () => {
         <ForgotPasswordScreenHeader
           title="Forgot Password"
           navigateBack={() => navigation.navigate('LoginScreen')}
+        />
+      </View>
+
+      <View>
+        <CustomModal
+          modalType="error"
+          message={modalMessage}
+          visibility={errorModalVisbility}
+          onClick={() => setErrorModalVisibility(false)}
+        />
+
+        <CustomModal
+          modalType="success"
+          message={modalMessage}
+          visibility={successModalVisbility}
+          onClick={successNavigate}
         />
       </View>
 
