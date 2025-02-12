@@ -1,5 +1,15 @@
-import React, { useState } from 'react';
-import {Image, SafeAreaView, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import ForgotPasswordScreenHeader from '../components/ForgotPasswordScreenHeader';
 import {useTheme} from '../context/ThemeContext';
 import {MainStackNavigationList} from '../navigation/stackNavigation/MainStackNavigation';
@@ -11,13 +21,11 @@ import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import CustomTextInput from '../components/CustomTextInput';
 import PrimaryButton from '../components/PrimaryButton';
-import { ScreenContainerStyles } from '../styles/ScreenContainerStyles';
-import { ForgotPasswordScreenStyles } from '../styles/ForgotPasswordScreenStyles';
+import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
+import {ForgotPasswordScreenStyles} from '../styles/ForgotPasswordScreenStyles';
 import useEmailVerifcation from '../hooks/useEmailVerification';
 import CustomModal from '../modals/CustomModal';
 import LoadingActivityIndicator from '../modals/LoadingActivityIndicator';
-
-
 
 type EmailVerficationNavigationProp = NativeStackNavigationProp<
   MainStackNavigationList,
@@ -36,8 +44,6 @@ const emailVerificationSchema = z.object({
 
 type EmailVerificationSchemaType = z.infer<typeof emailVerificationSchema>;
 
-
-
 const EmailVerificationScreen = () => {
   const {
     control,
@@ -48,123 +54,148 @@ const EmailVerificationScreen = () => {
   });
 
   const [modalMessage, setModalMessage] = useState<string>('');
-    
-    const [errorModalVisbility, setErrorModalVisibility] =
-      useState<boolean>(false);
-  
-    const [successModalVisbility, setSuccessModalVisibility] =
-      useState<boolean>(false);
 
-    const [userEmail,setUserEmail]=useState<{userName:string,email:string}|null>(null)  
+  const [errorModalVisbility, setErrorModalVisibility] =
+    useState<boolean>(false);
 
-      
+  const [successModalVisbility, setSuccessModalVisibility] =
+    useState<boolean>(false);
+
+  const [userEmail, setUserEmail] = useState<{
+    userName: string;
+    email: string;
+  } | null>(null);
 
   const theme = useTheme();
   const navigation = useNavigation<EmailVerficationNavigationProp>();
-  const emailVerificationRequest=useEmailVerifcation();
+  const emailVerificationRequest = useEmailVerifcation();
 
-  const successNavigate=()=>{
-    userEmail &&(
-      navigation.navigate("OtpVerificationScreen",{userName:userEmail.userName,email:userEmail.email})
-    )
-    
-  }
+  const successNavigate = () => {
+    userEmail &&
+      navigation.navigate('OtpVerificationScreen', {
+        userName: userEmail.userName,
+        email: userEmail.email,
+      });
+  };
 
   const submitDetails = (data: EmailVerificationSchemaType) => {
-    setUserEmail({userName:data.userName,email:data.email})
-    emailVerificationRequest.mutate(data,{
-      onSuccess:(data)=>{
-        console.log(data)
-        setModalMessage(data)
+    setUserEmail({userName: data.userName, email: data.email});
+    emailVerificationRequest.mutate(data, {
+      onSuccess: data => {
+        console.log(data);
+        setModalMessage(data);
         setSuccessModalVisibility(true);
-        
       },
-      onError:(error)=>{
-        console.log(error.name)
+      onError: error => {
+        console.log(error.name);
         setModalMessage(error.message);
         setErrorModalVisibility(true);
-      }
-    })
-    //navigation.navigate('OtpVerificationScreen')
+      },
+    });
   };
 
   return (
-    <SafeAreaView
-      style={[ScreenContainerStyles.container, {backgroundColor: theme.colors.background.primary}]}>
-      <View style={ForgotPasswordScreenStyles.headerConatiner}>
-        <ForgotPasswordScreenHeader
-          title="Forgot Password"
-          navigateBack={() => navigation.navigate('LoginScreen')}
-        />
-      </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{flex: 1}}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView
+          contentContainerStyle={{flexGrow: 1}}
+          keyboardShouldPersistTaps="handled">
+          <SafeAreaView
+            style={[
+              ScreenContainerStyles.container,
+              {backgroundColor: theme.colors.background.primary},
+            ]}>
+            <View style={ForgotPasswordScreenStyles.headerConatiner}>
+              <ForgotPasswordScreenHeader
+                title="Forgot Password"
+                navigateBack={() => navigation.navigate('LoginScreen')}
+              />
+            </View>
 
-      <View>
-        <CustomModal
-          modalType="error"
-          message={modalMessage}
-          visibility={errorModalVisbility}
-          onClick={() => setErrorModalVisibility(false)}
-        />
+            <View>
+              <CustomModal
+                modalType="error"
+                message={modalMessage}
+                visibility={errorModalVisbility}
+                onClick={() => setErrorModalVisibility(false)}
+              />
 
-        <CustomModal
-          modalType="success"
-          message={modalMessage}
-          visibility={successModalVisbility}
-          onClick={successNavigate}
-        />
+              <CustomModal
+                modalType="success"
+                message={modalMessage}
+                visibility={successModalVisbility}
+                onClick={successNavigate}
+              />
 
-        <LoadingActivityIndicator
-        title='Sending Email...'
-        visibility={emailVerificationRequest.isLoading}/>
-      </View>
+              <LoadingActivityIndicator
+                title="Sending Email..."
+                visibility={emailVerificationRequest.isLoading}
+              />
+            </View>
 
-      <View style={ForgotPasswordScreenStyles.imageContainer}>
-        <View style={ForgotPasswordScreenStyles.imageBox}>
-          <Image source={require('../../assets/icons/forgotIcon.png')} />
-        </View>
-      </View>
+            <View style={ForgotPasswordScreenStyles.imageContainer}>
+              <View style={ForgotPasswordScreenStyles.imageBox}>
+                <Image source={require('../../assets/icons/forgotIcon.png')} />
+              </View>
+            </View>
 
-      <View style={ForgotPasswordScreenStyles.textContainer}>
-        <ThemeText fontType="primary" fontStyle="semiBold" fontSize="xmedium">
-          Mail Address Here
-        </ThemeText>
-        <ThemeText fontType="primary" fontStyle="regular" fontSize="xsmall">
-          Enter  your  email  for  the  verification
-        </ThemeText>
-        <ThemeText fontType="primary" fontStyle="regular" fontSize="xsmall">
-          process.  We  will  send  4  digits  code  to
-        </ThemeText>
-        <ThemeText fontType="primary" fontStyle="regular" fontSize="xsmall">
-          your email.
-        </ThemeText>
-      </View>
+            <View style={ForgotPasswordScreenStyles.textContainer}>
+              <ThemeText
+                fontType="primary"
+                fontStyle="semiBold"
+                fontSize="xmedium">
+                Mail Address Here
+              </ThemeText>
+              <ThemeText
+                fontType="primary"
+                fontStyle="regular"
+                fontSize="xsmall">
+                Enter your email for the verification
+              </ThemeText>
+              <ThemeText
+                fontType="primary"
+                fontStyle="regular"
+                fontSize="xsmall">
+                process. We will send 4 digits code to
+              </ThemeText>
+              <ThemeText
+                fontType="primary"
+                fontStyle="regular"
+                fontSize="xsmall">
+                your email.
+              </ThemeText>
+            </View>
 
-      <View style={ForgotPasswordScreenStyles.textInputConatiner}>
-        <CustomTextInput
-          control={control}
-          regName="userName"
-          placeHolder="User Name"
-          inputType="text"
-          error={errors.userName?.message}
-        />
-        <CustomTextInput
-          control={control}
-          regName="email"
-          placeHolder="Email"
-          inputType="email"
-          error={errors.email?.message}
-        />
-      </View>
-      <View style={ForgotPasswordScreenStyles.buttonContainer}>
-        <PrimaryButton
-          title="Send"
-          titleFontColor="primary"
-          onHandle={handleSubmit(submitDetails)}
-        />
-      </View>
-    </SafeAreaView>
+            <View style={ForgotPasswordScreenStyles.textInputConatiner}>
+              <CustomTextInput
+                control={control}
+                regName="userName"
+                placeHolder="User Name"
+                inputType="text"
+                error={errors.userName?.message}
+              />
+              <CustomTextInput
+                control={control}
+                regName="email"
+                placeHolder="Email"
+                inputType="email"
+                error={errors.email?.message}
+              />
+            </View>
+            <View style={ForgotPasswordScreenStyles.buttonContainer}>
+              <PrimaryButton
+                title="Send"
+                titleFontColor="primary"
+                onHandle={handleSubmit(submitDetails)}
+              />
+            </View>
+          </SafeAreaView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 export default EmailVerificationScreen;
-

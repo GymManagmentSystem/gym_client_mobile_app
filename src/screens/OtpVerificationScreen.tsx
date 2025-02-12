@@ -1,5 +1,15 @@
 import React, {useState} from 'react';
-import {Image, SafeAreaView, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
 import {useTheme} from '../context/ThemeContext';
 import {ForgotPasswordScreenStyles} from '../styles/ForgotPasswordScreenStyles';
@@ -69,7 +79,9 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
   const successNavigate = () => {
     const userEmailData = route.params;
     setSuccessModalVisibility(false);
-    navigation.navigate('ResetPasswordScreen',{userName:userEmailData.userName});
+    navigation.navigate('ResetPasswordScreen', {
+      userName: userEmailData.userName,
+    });
   };
 
   const successResendProcess = () => {
@@ -82,7 +94,7 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
       onSuccess: data => {
         console.log(data);
         setModalMessage(data);
-        setSuccessResendModalVisibility(true)
+        setSuccessResendModalVisibility(true);
       },
       onError: error => {
         console.log(error.name);
@@ -112,105 +124,126 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
   };
 
   return (
-    <SafeAreaView
-      style={[
-        ScreenContainerStyles.container,
-        {backgroundColor: theme.colors.background.primary},
-      ]}>
-      <View>
-        <CustomModal
-          modalType="error"
-          message={modalMessage}
-          visibility={errorModalVisbility}
-          onClick={() => setErrorModalVisibility(false)}
-        />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{flex: 1}}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView
+          contentContainerStyle={{flexGrow: 1}}
+          keyboardShouldPersistTaps="handled">
+          <SafeAreaView
+            style={[
+              ScreenContainerStyles.container,
+              {backgroundColor: theme.colors.background.primary},
+            ]}>
+            <View>
+              <CustomModal
+                modalType="error"
+                message={modalMessage}
+                visibility={errorModalVisbility}
+                onClick={() => setErrorModalVisibility(false)}
+              />
 
-        <CustomModal
-          modalType="success"
-          message={modalMessage}
-          visibility={successModalVisbility}
-          onClick={successNavigate}
-        />
+              <CustomModal
+                modalType="success"
+                message={modalMessage}
+                visibility={successModalVisbility}
+                onClick={successNavigate}
+              />
 
-        <CustomModal
-          modalType="success"
-          message={modalMessage}
-          visibility={successResendModalVisbility}
-          onClick={successResendProcess}
-        />
+              <CustomModal
+                modalType="success"
+                message={modalMessage}
+                visibility={successResendModalVisbility}
+                onClick={successResendProcess}
+              />
 
-        <LoadingActivityIndicator
-          title="Sending Otp..."
-          visibility={resendingOtpRequest.isLoading}
-        />
-      </View>
+              <LoadingActivityIndicator
+                title="Sending Otp..."
+                visibility={resendingOtpRequest.isLoading}
+              />
+            </View>
 
-      <View style={ForgotPasswordScreenStyles.headerConatiner}>
-        <ForgotPasswordScreenHeader
-          title="Email Verification"
-          navigateBack={() => console.log(navigation.navigate('LoginScreen'))}
-        />
-      </View>
-      <View style={ForgotPasswordScreenStyles.imageContainer}>
-        <View style={ForgotPasswordScreenStyles.imageBox}>
-          <Image source={require('../../assets/icons/forgotIcon.png')} />
-        </View>
-      </View>
+            <View style={ForgotPasswordScreenStyles.headerConatiner}>
+              <ForgotPasswordScreenHeader
+                title="Email Verification"
+                navigateBack={() =>
+                  console.log(navigation.navigate('LoginScreen'))
+                }
+              />
+            </View>
+            <View style={ForgotPasswordScreenStyles.imageContainer}>
+              <View style={ForgotPasswordScreenStyles.imageBox}>
+                <Image source={require('../../assets/icons/forgotIcon.png')} />
+              </View>
+            </View>
 
-      <View style={ForgotPasswordScreenStyles.textContainer}>
-        <ThemeText fontType="primary" fontStyle="semiBold" fontSize="xmedium">
-          Get Your Code
-        </ThemeText>
-        <ThemeText fontType="primary" fontStyle="regular" fontSize="xsmall">
-          Enter the 6 digits code that you received
-        </ThemeText>
-        <ThemeText fontType="primary" fontStyle="regular" fontSize="xsmall">
-          on your email.
-        </ThemeText>
-      </View>
+            <View style={ForgotPasswordScreenStyles.textContainer}>
+              <ThemeText
+                fontType="primary"
+                fontStyle="semiBold"
+                fontSize="xmedium">
+                Get Your Code
+              </ThemeText>
+              <ThemeText
+                fontType="primary"
+                fontStyle="regular"
+                fontSize="xsmall">
+                Enter the 6 digits code that you received
+              </ThemeText>
+              <ThemeText
+                fontType="primary"
+                fontStyle="regular"
+                fontSize="xsmall">
+                on your email.
+              </ThemeText>
+            </View>
 
-      <View style={ForgotPasswordScreenStyles.textInputConatiner}>
-        <CustomTextInput
-          control={control}
-          regName="otp"
-          placeHolder="Enter OTP"
-          inputType="numeric"
-          error={errors.otp?.message}
-        />
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: getWidthPercentage(343, 396),
-          }}>
-          <ThemeText
-            fontType="primary"
-            fontStyle="regular"
-            fontColor="primary"
-            fontSize="xsmall">
-            If you don’t receive code!
-          </ThemeText>
-          <TouchableOpacity onPress={resendOtp}>
-            <ThemeText
-              fontType="primary"
-              fontStyle="regular"
-              fontColor="other"
-              fontSize="small">
-              Resend
-            </ThemeText>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={ForgotPasswordScreenStyles.buttonContainer}>
-        <PrimaryButton
-          title="Verify"
-          titleFontColor="primary"
-          onHandle={handleSubmit(submitOtp)}
-        />
-      </View>
-    </SafeAreaView>
+            <View style={ForgotPasswordScreenStyles.textInputConatiner}>
+              <CustomTextInput
+                control={control}
+                regName="otp"
+                placeHolder="Enter OTP"
+                inputType="numeric"
+                error={errors.otp?.message}
+              />
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: getWidthPercentage(343, 396),
+                }}>
+                <ThemeText
+                  fontType="primary"
+                  fontStyle="regular"
+                  fontColor="primary"
+                  fontSize="xsmall">
+                  If you don’t receive code!
+                </ThemeText>
+                <TouchableOpacity onPress={resendOtp}>
+                  <ThemeText
+                    fontType="primary"
+                    fontStyle="regular"
+                    fontColor="other"
+                    fontSize="small">
+                    Resend
+                  </ThemeText>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={ForgotPasswordScreenStyles.buttonContainer}>
+              <PrimaryButton
+                title="Verify"
+                titleFontColor="primary"
+                onHandle={handleSubmit(submitOtp)}
+              />
+            </View>
+          </SafeAreaView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
