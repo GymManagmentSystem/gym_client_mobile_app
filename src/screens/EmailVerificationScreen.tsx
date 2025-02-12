@@ -61,7 +61,7 @@ const EmailVerificationScreen = () => {
 
   const theme = useTheme();
   const navigation = useNavigation<EmailVerficationNavigationProp>();
-  const emailVerification=useEmailVerifcation();
+  const emailVerificationRequest=useEmailVerifcation();
 
   const successNavigate=()=>{
     userEmail &&(
@@ -72,7 +72,7 @@ const EmailVerificationScreen = () => {
 
   const submitDetails = (data: EmailVerificationSchemaType) => {
     setUserEmail({userName:data.userName,email:data.email})
-    emailVerification.mutate(data,{
+    emailVerificationRequest.mutate(data,{
       onSuccess:(data)=>{
         console.log(data)
         setModalMessage(data)
@@ -115,7 +115,7 @@ const EmailVerificationScreen = () => {
 
         <LoadingActivityIndicator
         title='Sending Email...'
-        visibility={emailVerification.isLoading}/>
+        visibility={emailVerificationRequest.isLoading}/>
       </View>
 
       <View style={ForgotPasswordScreenStyles.imageContainer}>

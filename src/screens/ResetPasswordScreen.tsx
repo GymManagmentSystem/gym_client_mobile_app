@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, SafeAreaView, View} from 'react-native';
 import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
 import {ForgotPasswordScreenStyles} from '../styles/ForgotPasswordScreenStyles';
@@ -10,24 +10,26 @@ import PrimaryButton from '../components/PrimaryButton';
 import {z} from 'zod';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainStackNavigationList} from '../navigation/stackNavigation/MainStackNavigation';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
+import usePasswordReset from '../hooks/usePasswordReset';
+import CustomModal from '../modals/CustomModal';
 
 const passwordSchema = z.object({
   password: z
     .string()
     .min(8, {message: 'password must have more than 8 characters'})
     .regex(/[A-Z]/, {
-      message: 'Password must contain at least one uppercase letter'
+      message: 'Password must contain at least one uppercase letter',
     })
     .regex(/[a-z]/, {
-      message: 'Password must contain at least one lowercase letter'
+      message: 'Password must contain at least one lowercase letter',
     })
     .regex(/[0-9]/, {message: 'Password must contain at least one number'})
     .regex(/[@$!%*?&^#]/, {
       message:
-        'Password must contain at least one special character (@$!%*?&^#)'
+        'Password must contain at least one special character (@$!%*?&^#)',
     }),
   confirmPassword: z
     .string()
@@ -36,12 +38,17 @@ const passwordSchema = z.object({
 
 type PasswordType = z.infer<typeof passwordSchema>;
 
+type ResetPasswordRouteProp = RouteProp<
+  MainStackNavigationList,
+  'ResetPasswordScreen'
+>;
+
 type resetPasswordNavigationProp = NativeStackNavigationProp<
   MainStackNavigationList,
   'ResetPasswordScreen'
 >;
 
-const ResetPasswordScreen = () => {
+const ResetPasswordScreen = ({route}: {route: ResetPasswordRouteProp}) => {
   const {
     control,
     handleSubmit,
@@ -51,12 +58,36 @@ const ResetPasswordScreen = () => {
   });
 
   const theme = useTheme();
+
   const navigation = useNavigation<resetPasswordNavigationProp>();
 
-  const submitDetails=(data:PasswordType)=>{
-    console.log(data)
-    navigation.navigate("SuccessPasswordResetScreen")
-  }
+  const resetPasswordRequest = usePasswordReset();
+
+  const [modalMessage, setModalMessage] = useState<string>('');
+
+  const [errorModalVisbility, setErrorModalVisibility] =
+    useState<boolean>(false);
+
+  const submitDetails = ({password, confirmPassword}: PasswordType) => {
+    const {userName} = route.params;
+    if (password != confirmPassword) {
+      setModalMessage('Password Mistmatching');
+      setErrorModalVisibility(true);
+    } else {
+      resetPasswordRequest.mutate(
+        {userName, password},
+        {
+          onSuccess: data => {
+            navigation.navigate('SuccessPasswordResetScreen');
+          },
+          onError: error => {
+            setModalMessage(error.message);
+            setErrorModalVisibility(true);
+          },
+        },
+      );
+    }
+  };
 
   return (
     <SafeAreaView
@@ -64,6 +95,15 @@ const ResetPasswordScreen = () => {
         ScreenContainerStyles.container,
         {backgroundColor: theme.colors.background.primary},
       ]}>
+      <View>
+        <CustomModal
+          modalType="error"
+          message={modalMessage}
+          visibility={errorModalVisbility}
+          onClick={() => setErrorModalVisibility(false)}
+        />
+
+      </View>
       <View style={ForgotPasswordScreenStyles.headerConatiner}>
         <ForgotPasswordScreenHeader
           title="Reset Password"
@@ -95,6 +135,7 @@ const ResetPasswordScreen = () => {
           placeHolder="Password"
           inputType="text"
           error={errors.password?.message}
+          isPassword={true}
         />
         <CustomTextInput
           control={control}
@@ -102,6 +143,7 @@ const ResetPasswordScreen = () => {
           placeHolder="Confirm Password"
           inputType="text"
           error={errors.confirmPassword?.message}
+          isPassword={true}
         />
       </View>
       <View style={ForgotPasswordScreenStyles.buttonContainer}>

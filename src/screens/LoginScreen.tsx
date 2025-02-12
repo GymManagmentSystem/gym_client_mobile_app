@@ -86,7 +86,6 @@ const LoginScreen = () => {
   };
 
   const successNavigate = () => {
-    navigation.navigate('ResetPasswordScreen');
     setSuccessModalVisibility(false);
   };
 
