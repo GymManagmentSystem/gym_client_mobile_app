@@ -28,6 +28,7 @@
     "react-native-bcrypt": "^2.4.0",
     "react-native-dotenv": "^3.4.11",
     "react-native-fast-image": "^8.6.3",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-pager-view": "^6.2.3",
     "react-native-progress": "^5.0.1",

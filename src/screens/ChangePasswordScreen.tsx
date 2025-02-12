@@ -1,5 +1,14 @@
 import React, {useState} from 'react';
-import {Image, SafeAreaView, View} from 'react-native';
+import {
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
 import {ForgotPasswordScreenStyles} from '../styles/ForgotPasswordScreenStyles';
 import ForgotPasswordScreenHeader from '../components/ForgotPasswordScreenHeader';
@@ -61,7 +70,7 @@ const ChangePasswordScreen = ({route}: {route: ResetPasswordRouteProp}) => {
   const navigation = useNavigation<ResetPasswordNavigationProp>();
 
   const [modalMessage, setModalMessage] = useState<string>('');
-  
+
   const [errorModalVisbility, setErrorModalVisibility] =
     useState<boolean>(false);
 
@@ -100,78 +109,97 @@ const ChangePasswordScreen = ({route}: {route: ResetPasswordRouteProp}) => {
   };
 
   return (
-    <SafeAreaView
-      style={[
-        ScreenContainerStyles.container,
-        {backgroundColor: theme.colors.background.primary},
-      ]}>
-      <View style={ForgotPasswordScreenStyles.headerConatiner}>
-        <ForgotPasswordScreenHeader
-          title="Reset Password"
-          navigateBack={() => navigation.goBack()}
-        />
-      </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{flex: 1}}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView
+          contentContainerStyle={{flexGrow: 1}}
+          keyboardShouldPersistTaps="handled">
+          <SafeAreaView
+            style={[
+              ScreenContainerStyles.container,
+              {backgroundColor: theme.colors.background.primary},
+            ]}>
+            <View style={ForgotPasswordScreenStyles.headerConatiner}>
+              <ForgotPasswordScreenHeader
+                title="Reset Password"
+                navigateBack={() => navigation.goBack()}
+              />
+            </View>
 
-      <View>
-        <CustomModal
-          modalType="error"
-          message={modalMessage}
-          visibility={errorModalVisbility}
-          onClick={() => setErrorModalVisibility(false)}
-        />
+            <View>
+              <CustomModal
+                modalType="error"
+                message={modalMessage}
+                visibility={errorModalVisbility}
+                onClick={() => setErrorModalVisibility(false)}
+              />
 
-        <CustomModal
-          modalType="success"
-          message={modalMessage}
-          visibility={successModalVisbility}
-          onClick={successNavigate}
-        />
-      </View>
+              <CustomModal
+                modalType="success"
+                message={modalMessage}
+                visibility={successModalVisbility}
+                onClick={successNavigate}
+              />
+            </View>
 
-      <View style={ForgotPasswordScreenStyles.imageContainer}>
-        <View style={ForgotPasswordScreenStyles.imageBox}>
-          <Image source={require('../../assets/icons/forgotIcon.png')} />
-        </View>
-      </View>
+            <View style={ForgotPasswordScreenStyles.imageContainer}>
+              <View style={ForgotPasswordScreenStyles.imageBox}>
+                <Image source={require('../../assets/icons/forgotIcon.png')} />
+              </View>
+            </View>
 
-      <View style={ForgotPasswordScreenStyles.textContainer}>
-        <ThemeText fontType="primary" fontStyle="semiBold" fontSize="xmedium">
-          Enter New Password
-        </ThemeText>
-        <ThemeText fontType="primary" fontStyle="regular" fontSize="xsmall">
-          You must reset your password
-        </ThemeText>
-        <ThemeText fontType="primary" fontStyle="regular" fontSize="xsmall">
-          in your first login.
-        </ThemeText>
-      </View>
+            <View style={ForgotPasswordScreenStyles.textContainer}>
+              <ThemeText
+                fontType="primary"
+                fontStyle="semiBold"
+                fontSize="xmedium">
+                Enter New Password
+              </ThemeText>
+              <ThemeText
+                fontType="primary"
+                fontStyle="regular"
+                fontSize="xsmall">
+                You must reset your password
+              </ThemeText>
+              <ThemeText
+                fontType="primary"
+                fontStyle="regular"
+                fontSize="xsmall">
+                in your first login.
+              </ThemeText>
+            </View>
 
-      <View style={ForgotPasswordScreenStyles.textInputConatiner}>
-        <CustomTextInput
-          control={control}
-          regName="password"
-          placeHolder="Password"
-          inputType="text"
-          isPassword={true}
-          error={errors.password?.message}
-        />
-        <CustomTextInput
-          control={control}
-          regName="confirmPassword"
-          placeHolder="Confirm Password"
-          inputType="text"
-          isPassword={true}
-          error={errors.confirmPassword?.message}
-        />
-      </View>
-      <View style={ForgotPasswordScreenStyles.buttonContainer}>
-        <PrimaryButton
-          title="Reset"
-          titleFontColor="primary"
-          onHandle={handleSubmit(submitDetails)}
-        />
-      </View>
-    </SafeAreaView>
+            <View style={ForgotPasswordScreenStyles.textInputConatiner}>
+              <CustomTextInput
+                control={control}
+                regName="password"
+                placeHolder="Password"
+                inputType="text"
+                isPassword={true}
+                error={errors.password?.message}
+              />
+              <CustomTextInput
+                control={control}
+                regName="confirmPassword"
+                placeHolder="Confirm Password"
+                inputType="text"
+                isPassword={true}
+                error={errors.confirmPassword?.message}
+              />
+            </View>
+            <View style={ForgotPasswordScreenStyles.buttonContainer}>
+              <PrimaryButton
+                title="Reset"
+                titleFontColor="primary"
+                onHandle={handleSubmit(submitDetails)}
+              />
+            </View>
+          </SafeAreaView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
