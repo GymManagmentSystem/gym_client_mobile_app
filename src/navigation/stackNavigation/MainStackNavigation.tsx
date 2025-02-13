@@ -5,14 +5,16 @@ import OtpVerificationScreen from '../../screens/OtpVerificationScreen';
 import ResetPasswordScreen from '../../screens/ResetPasswordScreen';
 import ChangePasswordScreen from '../../screens/ChangePasswordScreen';
 import SuccessPasswordResetScreen from '../../screens/SuccessPasswordResetScreen';
+import BottomStackNavigation from '../bottomStackNavigation/BottomStackNavigation';
 
 export type MainStackNavigationList = {
   LoginScreen: undefined;
   EmailVerficationScreen: undefined;
-  "OtpVerificationScreen": {userName:string,email:string};
-  "ResetPasswordScreen": {userName:string};
-  "ChangePasswordScreen": {userName:string}
+  OtpVerificationScreen: {userName: string; email: string};
+  ResetPasswordScreen: {userName: string};
+  ChangePasswordScreen: {userName: string};
   SuccessPasswordResetScreen: undefined;
+  BottomStackScreens: undefined;
 };
 
 const MainStackNavigation = () => {
@@ -20,7 +22,7 @@ const MainStackNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="LoginScreen">
+      initialRouteName="BottomStackScreens">
       <Stack.Screen name="LoginScreen" component={LoginScreen}></Stack.Screen>
       <Stack.Screen
         name="EmailVerficationScreen"
@@ -37,6 +39,10 @@ const MainStackNavigation = () => {
       <Stack.Screen
         name="SuccessPasswordResetScreen"
         component={SuccessPasswordResetScreen}></Stack.Screen>
+
+      <Stack.Screen
+        name="BottomStackScreens"
+        component={BottomStackNavigation}></Stack.Screen>
     </Stack.Navigator>
   );
 };
