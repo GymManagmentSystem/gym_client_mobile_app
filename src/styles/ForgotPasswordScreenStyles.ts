@@ -3,13 +3,13 @@ import { getHeightPercentage, getWidthPercentage } from "../utility/Dimensions";
 
 export const ForgotPasswordScreenStyles=StyleSheet.create({
       headerConatiner: {
-        marginTop: getHeightPercentage(30,852),
+        marginTop: getHeightPercentage(30),
       },
       imageContainer: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop:getHeightPercentage(45,852)
+        marginTop:getHeightPercentage(45)
       },
       imageBox: {
         width: 120,
@@ -17,18 +17,18 @@ export const ForgotPasswordScreenStyles=StyleSheet.create({
         borderRadius: 60,
       },
       textContainer: {
-        marginTop:getHeightPercentage(53,852),
+        marginTop:getHeightPercentage(53),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
       },
       textInputConatiner: {
-        marginTop:getHeightPercentage(45,852),
+        marginTop:getHeightPercentage(45),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
       },
       buttonContainer:{
-        marginTop:getHeightPercentage(71,852)
+        marginTop:getHeightPercentage(71)
       }
 })

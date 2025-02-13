@@ -213,7 +213,7 @@ const OtpVerificationScreen = ({route}: {route: OtpVerificationRouteProp}) => {
                   flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  width: getWidthPercentage(343, 396),
+                  width: getWidthPercentage(343),
                 }}>
                 <ThemeText
                   fontType="primary"

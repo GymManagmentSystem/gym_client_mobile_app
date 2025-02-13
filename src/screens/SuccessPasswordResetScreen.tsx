@@ -59,7 +59,7 @@ const style = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: getHeightPercentage(127, 852),
+    marginTop: getHeightPercentage(127),
   },
   imageBox: {
     width: 120,
@@ -71,9 +71,9 @@ const style = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginTop: getHeightPercentage(94, 852),
+    marginTop: getHeightPercentage(94),
   },
   buttonContainer: {
-    marginTop: getHeightPercentage(166, 852),
+    marginTop: getHeightPercentage(166),
   },
 });
