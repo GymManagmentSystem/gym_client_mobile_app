@@ -1,13 +1,14 @@
 import React from 'react';
 import {Image, View} from 'react-native';
+import { useTheme } from '../context/ThemeContext';
 
 interface TabIconProps {
-  theme: any;
   source: any;
   focused: boolean;
 }
 
-const TabIcon = ({theme, source, focused}: TabIconProps) => {
+const TabIcon = ({source, focused}: TabIconProps) => {
+ const theme=useTheme();
   const color = focused
     ? theme.icons.iconColor.active
     : theme.icons.iconColor.inActive;

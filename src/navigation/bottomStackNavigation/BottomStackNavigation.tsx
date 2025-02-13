@@ -30,128 +30,39 @@ const BottomStackNavigation = () => {
         },
         tabBarShowLabel: false,
       }}>
-      <Tab.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({focused}) => {
-            const color = focused
-              ? theme.icons.iconColor.active
-              : theme.icons.iconColor.inActive;
-            const backgroundColor = focused
-              ? theme.icons.backgroundColor.active
-              : theme.icons.backgroundColor.inActive;
-            return (
-              <View
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 25,
-                  backgroundColor,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  source={require('../../../assets/icons/homeIcon.png')}
-                  style={{width: 20.5, height: 20, tintColor: color}}
-                />
-              </View>
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name="TrackScheduleScreen"
-        component={TrackScheduleScreen}
-        options={{
-          tabBarIcon: ({focused}) => {
-            const color = focused
-              ? theme.icons.iconColor.active
-              : theme.icons.iconColor.inActive;
-            const backgroundColor = focused
-              ? theme.icons.backgroundColor.active
-              : theme.icons.backgroundColor.inActive;
-            return (
-              <View
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 25,
-                  backgroundColor,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  source={require('../../../assets/icons/exerciseIcon.png')}
-                  style={{width: 20.5, height: 20, tintColor: color}}
-                />
-              </View>
-            );
-          },
-        }}
-      />
-
-      <Tab.Screen
-        name="PaymentHistoryScreen"
-        component={PaymentHistoryScreen}
-        options={{
-          tabBarIcon: ({focused}) => {
-            const color = focused
-              ? theme.icons.iconColor.active
-              : theme.icons.iconColor.inActive;
-            const backgroundColor = focused
-              ? theme.icons.backgroundColor.active
-              : theme.icons.backgroundColor.inActive;
-            return (
-              <View
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 25,
-                  backgroundColor,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  source={require('../../../assets/icons/paymentIcon.png')}
-                  style={{width: 20.5, height: 20, tintColor: color}}
-                />
-              </View>
-            );
-          },
-        }}
-      />
-
-      <Tab.Screen
-        name="ProfileScreen"
-        component={ProfileScreen}
-        options={{
-          tabBarIcon: ({focused}) => {
-            const color = focused
-              ? theme.icons.iconColor.active
-              : theme.icons.iconColor.inActive;
-            const backgroundColor = focused
-              ? theme.icons.backgroundColor.active
-              : theme.icons.backgroundColor.inActive;
-            return (
-              <View
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 25,
-                  backgroundColor,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  source={require('../../../assets/icons/profileIcon.png')}
-                  style={{width: 20.5, height: 20, tintColor: color}}
-                />
-              </View>
-            );
-          },
-        }}
-      />
+      {[
+        {
+          name: 'HomeScreen',
+          component: HomeScreen,
+          icon: require('../../../assets/icons/homeIcon.png'),
+        },
+        {
+          name: 'TrackScheduleScreen',
+          component: TrackScheduleScreen,
+          icon: require('../../../assets/icons/exerciseIcon.png'),
+        },
+        {
+          name: 'PaymentHistoryScreen',
+          component: PaymentHistoryScreen,
+          icon: require('../../../assets/icons/paymentIcon.png'),
+        },
+        {
+          name: 'ProfileScreen',
+          component: ProfileScreen,
+          icon: require('../../../assets/icons/profileIcon.png'),
+        },
+      ].map(({name, component, icon}) => (
+        <Tab.Screen
+          key={name}
+          name={name as keyof BottomTabNavigationList}
+          component={component}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabIcon source={icon} focused={focused} />
+            ),
+          }}
+        />
+      ))}
     </Tab.Navigator>
   );
 };
