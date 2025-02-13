@@ -25,7 +25,7 @@ const HomeScreen = () => {
       <ImageBackground
         style={style.topContainer}
         source={require('../../assets/images/homeBackground.png')}>
-        <View style={style.nameContainer}>
+        <View style={style.greetingContainer}>
           <ThemeText fontType="primary" fontSize="medium" fontStyle="medium">
             {getGreeting()}
           </ThemeText>
@@ -33,7 +33,34 @@ const HomeScreen = () => {
             Nethupama
           </ThemeText>
         </View>
+        <View style={style.scheduleTypeContainer}>
+          <ThemeText fontType="secondary" fontSize="xmedium" fontStyle="regular">
+            Today is your
+          </ThemeText>
+          <ThemeText fontType="secondary" fontSize="xmedium" fontStyle="bold" fontColor='other'>
+            Chest Day
+          </ThemeText>
+        </View>
+
+        <View style={style.motivationTextContainer}>
+          <ThemeText fontType="secondary" fontSize="medium" fontStyle="bold">
+          Stay focused, lift strong, and make
+          </ThemeText>
+          <ThemeText fontType="secondary" fontSize="medium" fontStyle="bold">
+          every rep count!
+          </ThemeText>
+        </View>
       </ImageBackground>
+
+      <View style={style.bodyContainer}>
+        <View style={style.middleContainer}>
+          <ThemeText fontType="primary" fontSize="xmedium" fontStyle="regular">Assigned Schedules</ThemeText>
+          <View>
+            
+          </View>
+        </View>
+
+      </View>
     </SafeAreaView>
   );
 };
@@ -48,8 +75,25 @@ const style = StyleSheet.create({
     height: getHeightPercentage(342),
     width: '100%',
   },
-  nameContainer: {
+  greetingContainer: {
     marginTop: getHeightPercentage(20),
     marginLeft: getWidthPercentage(16),
   },
+  scheduleTypeContainer:{
+    marginTop: getHeightPercentage(30),
+    marginLeft: getWidthPercentage(16),
+  },
+  motivationTextContainer:{
+    marginTop:getHeightPercentage(100),
+    alignItems:"center"
+  },
+  bodyContainer:{
+    marginTop:getHeightPercentage(10),
+    marginLeft:getWidthPercentage(16),
+    marginRight:getWidthPercentage(16),
+  },
+  middleContainer:{
+    alignItems:"flex-start"
+  }
+
 });
