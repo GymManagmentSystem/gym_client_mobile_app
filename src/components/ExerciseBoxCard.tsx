@@ -22,7 +22,7 @@ const ExerciseBoxCard = ({
     <View
       style={[
         style.cardContainer,
-        {backgroundColor: theme.colors.background.other},
+        {backgroundColor: theme.colors.background.secondary},
       ]}>
       <View style={style.imageConatiner}>
         <Image source={require('../../assets/images/exerciseImage.png')} />
@@ -32,7 +32,7 @@ const ExerciseBoxCard = ({
           fontType="primary"
           fontSize="small"
           fontStyle="medium"
-          fontColor="tertiory">
+          fontColor="other">
           {exerciseName}
         </ThemeText>
         <View style={style.repsSetContainer}>
@@ -40,13 +40,13 @@ const ExerciseBoxCard = ({
             <View
               style={[
                 style.repsSetBox,
-                {backgroundColor: theme.colors.background.quaternary.secondary},
+                {backgroundColor: theme.colors.background.other},
               ]}>
               <ThemeText
                 fontType="primary"
                 fontSize="xsmall"
                 fontStyle="medium"
-                fontColor="primary">
+                fontColor="tertiory">
                 {`${sets} sets`}
               </ThemeText>
             </View>
@@ -55,13 +55,13 @@ const ExerciseBoxCard = ({
             <View
               style={[
                 style.repsSetBox,
-                {backgroundColor: theme.colors.background.quaternary.secondary},
+                {backgroundColor: theme.colors.background.other},
               ]}>
               <ThemeText
                 fontType="primary"
                 fontSize="xsmall"
                 fontStyle="medium"
-                fontColor="primary">
+                fontColor="tertiory">
                 {`${reps} reps`}
               </ThemeText>
             </View>
@@ -70,13 +70,13 @@ const ExerciseBoxCard = ({
             <View
               style={[
                 style.durationBox,
-                {backgroundColor: theme.colors.background.quaternary.secondary},
+                {backgroundColor: theme.colors.background.other},
               ]}>
               <ThemeText
                 fontType="primary"
                 fontSize="xsmall"
                 fontStyle="medium"
-                fontColor="primary">
+                fontColor="tertiory">
                 {`${duration} minutes`}
               </ThemeText>
             </View>
@@ -117,6 +117,7 @@ const style = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     marginTop: 5,
+    gap:10
   },
   repsSetContainer: {
     display: 'flex',

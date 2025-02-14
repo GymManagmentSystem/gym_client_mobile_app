@@ -1,4 +1,6 @@
 import {createContext, useContext} from 'react';
+import { getScaleFontSize } from '../utility/FontScaleRatio';
+
 
 type Theme = {
   colors: {
@@ -7,7 +9,6 @@ type Theme = {
     background: {
       primary: string;
       secondary: string;
-      tertiory:string;
       quaternary:{
         primary:string,
         secondary:string
@@ -63,9 +64,8 @@ const theme: Theme = {
     primary: '#fff',
     secondary: '#F1B900',
     background: {
-      primary: '#242525',
-      secondary: '#535353',
-      tertiory:"#1A1A1C",
+      primary: '#000',
+      secondary: '#1A1A1C',
       quaternary:{        //gray colour varient
         primary:"#535353",
         secondary:"#8F918F",
@@ -90,11 +90,11 @@ const theme: Theme = {
       },
     },
     fontSize: {
-      xsmall: 13,
-      small: 16,
-      medium: 18,
-      xmedium: 20,
-      large: 24,
+      xsmall: getScaleFontSize(14),
+      small: getScaleFontSize(16),
+      medium: getScaleFontSize(18),
+      xmedium: getScaleFontSize(20),
+      large:getScaleFontSize(24) ,
     },
     colors: {
       primary: '#fff',

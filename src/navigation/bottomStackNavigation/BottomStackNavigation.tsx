@@ -26,7 +26,7 @@ const BottomStackNavigation = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: theme.colors.background.tertiory,
+          backgroundColor: theme.colors.background.primary,
           height: getHeightPercentage(70),
         },
         tabBarShowLabel: false,
