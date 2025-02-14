@@ -7,6 +7,7 @@ import TrackScheduleScreen from '../../screens/TrackScheduleScreen';
 import PaymentHistoryScreen from '../../screens/PaymentHistoryScreen';
 import ProfileScreen from '../../screens/ProfileScreen';
 import TabIcon from '../../components/TabIcon';
+import { getHeightPercentage } from '../../utility/Dimensions';
 
 type BottomTabNavigationList = {
   HomeScreen: undefined;
@@ -26,7 +27,7 @@ const BottomStackNavigation = () => {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: theme.colors.background.tertiory,
-          height: 92,
+          height: getHeightPercentage(70),
         },
         tabBarShowLabel: false,
       }}>

@@ -25,17 +25,18 @@ const HomeScreen = () => {
         style.mainContainer,
         {backgroundColor: theme.colors.background.primary},
       ]}>
+      <View style={style.greetingContainer}>
+        <ThemeText fontType="primary" fontSize="medium" fontStyle="medium">
+          {getGreeting()}
+        </ThemeText>
+        <ThemeText fontType="primary" fontSize="large" fontStyle="semiBold">
+          Nethupama Shavinda
+        </ThemeText>
+      </View>
       <ImageBackground
-        style={style.topContainer}
-        source={require('../../assets/images/homeBackground.png')}>
-        <View style={style.greetingContainer}>
-          <ThemeText fontType="primary" fontSize="medium" fontStyle="medium">
-            {getGreeting()}
-          </ThemeText>
-          <ThemeText fontType="primary" fontSize="large" fontStyle="semiBold">
-            Nethupama Shavinda
-          </ThemeText>
-        </View>
+        borderRadius={20}
+        style={style.homeImageConatiner}
+        source={require('../../assets/images/updatedHomeImage.png')}>
         <View style={style.scheduleTypeContainer}>
           <ThemeText
             fontType="secondary"
@@ -124,18 +125,20 @@ export default HomeScreen;
 const style = StyleSheet.create({
   mainContainer: {
     flex: 1,
-  },
-  topContainer: {
-    height: getHeightPercentage(342),
-    width: '100%',
+    paddingLeft: getWidthPercentage(16),
+    paddingRight: getWidthPercentage(16),
   },
   greetingContainer: {
     marginTop: getHeightPercentage(20),
-    marginLeft: getWidthPercentage(16),
+  },
+  homeImageConatiner: {
+    marginTop: getHeightPercentage(10),
+    height: getHeightPercentage(250),
+    width: getWidthPercentage(361),
+    paddingLeft:getWidthPercentage(16)
   },
   scheduleTypeContainer: {
     marginTop: getHeightPercentage(30),
-    marginLeft: getWidthPercentage(16),
   },
   motivationTextContainer: {
     marginTop: getHeightPercentage(100),
@@ -143,16 +146,14 @@ const style = StyleSheet.create({
   },
   bodyContainer: {
     marginTop: getHeightPercentage(10),
-    marginLeft: getWidthPercentage(16),
-    marginRight: getWidthPercentage(16),
-    marginBottom:10,
+    marginBottom: 10,
     flex: 1,
   },
   middleContainer: {
     alignItems: 'flex-start',
   },
-  bottomContainer:{
-    marginTop:getHeightPercentage(10)
+  bottomContainer: {
+    marginTop: getHeightPercentage(10),
   },
   scheduleBoxContainer: {
     display: 'flex',
@@ -161,5 +162,6 @@ const style = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     gap: 10,
+    flex:1,
   },
 });
