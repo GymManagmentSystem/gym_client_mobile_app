@@ -14,6 +14,7 @@ import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
 import useLogin from '../hooks/useLogin';
 import CustomModal from '../modals/CustomModal';
 import LoadingActivityIndicator from '../modals/LoadingActivityIndicator';
+import useUserNameStore from '../store/useNameStore';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   MainStackNavigationList,
@@ -50,6 +51,8 @@ const LoginScreen = () => {
 
   const theme = useTheme();
 
+  const userNameStore=useUserNameStore()
+
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const {
     control,
@@ -59,9 +62,9 @@ const LoginScreen = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginSchemaType) => {
-    setUserName(data.userName);
-    loginRequest.mutate(data, {
+  const onSubmit = (userCredentials: LoginSchemaType) => {
+    setUserName(userCredentials.userName);
+    loginRequest.mutate(userCredentials, {
       onSuccess: data => {
         let memberType = data.successMessage.split(':')[1].trim();
         console.log(memberType);
@@ -69,6 +72,7 @@ const LoginScreen = () => {
           setModalMessage('Reset your password at first Login');
           setPasswordResetSuccessModalVisibility(true);
         } else {
+          userNameStore.setUserName(userCredentials.userName)
           setModalMessage('Login Succesfull');
           setSuccessModalVisibility(true);
         }
@@ -81,7 +85,7 @@ const LoginScreen = () => {
   };
 
   const passwordResetSuccessNavigate = () => {
-    navigation.navigate('ChangePasswordScreen', {userName});
+    navigation.navigate('BottomStackScreens');
     setPasswordResetSuccessModalVisibility(false);
   };
 

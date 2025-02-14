@@ -13,9 +13,13 @@ import ThemeText from '../components/ThemeText';
 import {getGreeting} from '../utility/Greeting';
 import ScheduleTypeBox from '../components/ScheduleTypeBox';
 import ExerciseBoxCard from '../components/ExerciseBoxCard';
+import useUserNameStore from '../store/useNameStore';
 
 const HomeScreen = () => {
   const theme = useTheme();
+  const userNameStore=useUserNameStore()
+
+
   const [selectedScheduleType, setSelectedScheduleType] =
     useState<string>('chest');
 
@@ -30,7 +34,7 @@ const HomeScreen = () => {
           {getGreeting()}
         </ThemeText>
         <ThemeText fontType="primary" fontSize="large" fontStyle="semiBold">
-          Nethupama Shavinda
+          {userNameStore.loggedUserName}
         </ThemeText>
       </View>
       <ImageBackground
