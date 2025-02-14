@@ -28,7 +28,7 @@ const useLogin = () => {
                         password:password,
                         userType:"MEMBER"
                 })
-                axios.defaults.headers.common['Authorization']=`Bearer ${data.token}`
+                axiosInstance.defaults.headers.common['Authorization']=`Bearer ${data.token}`
                 return data;
             }catch(e){
                 if(e instanceof AxiosError){

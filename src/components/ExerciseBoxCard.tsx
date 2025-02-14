@@ -7,8 +7,9 @@ import ThemeText from './ThemeText';
 interface ExerciseCardProps {
   exerciseName: string;
   sets: number;
-  reps: number;
+  reps: string;
   duration: number;
+  url:string
 }
 
 const ExerciseBoxCard = ({
@@ -16,7 +17,9 @@ const ExerciseBoxCard = ({
   sets,
   reps,
   duration,
+  url
 }: ExerciseCardProps) => {
+  console.log(url)
   const theme = useTheme();
   return (
     <View
@@ -25,7 +28,7 @@ const ExerciseBoxCard = ({
         {backgroundColor: theme.colors.background.secondary},
       ]}>
       <View style={style.imageConatiner}>
-        <Image source={require('../../assets/images/exerciseImage.png')} />
+        <Image source={{uri:url}} />
       </View>
       <View style={style.exerciseDataContainer}>
         <ThemeText
@@ -51,7 +54,7 @@ const ExerciseBoxCard = ({
               </ThemeText>
             </View>
           )}
-          {reps > 0 && (
+          {reps && (
             <View
               style={[
                 style.repsSetBox,
@@ -62,7 +65,7 @@ const ExerciseBoxCard = ({
                 fontSize="xsmall"
                 fontStyle="medium"
                 fontColor="tertiory">
-                {`${reps} reps`}
+                {`${reps.split('-')[0]} reps`}
               </ThemeText>
             </View>
           )}

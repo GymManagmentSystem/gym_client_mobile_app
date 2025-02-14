@@ -43,13 +43,15 @@ const useGetCurrentSchedules=(memberId:number)=>{
     const getCurrentSchedule=async()=>{
         try{
         const {data}=await axiosInstance.get<SuccessResponse>(`/schedules/current/${memberId}`)
+        console.log(data.dataList)
         return data.dataList;
         }catch(e){
+            console.log(e)
             if(e instanceof AxiosError){
                 const error=((e.response?.data) as ErrorResponse).errorMessage || "Request failed"
                 throw new Error(error)
                         }
-            console.log(e)
+            
                 throw new Error("Un expected error occured")
         }
     }

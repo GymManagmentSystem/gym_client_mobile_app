@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -23,6 +23,7 @@ const HomeScreen = () => {
 
   const [selectedScheduleType, setSelectedScheduleType] =
     useState<string>('chest');
+
 
   return (
     <SafeAreaView
@@ -76,49 +77,36 @@ const HomeScreen = () => {
 
           <ScrollView horizontal={true}>
             <View style={style.scheduleBoxContainer}>
-              {[
-                {type: 'chest'},
-                {type: 'arm'},
-                {type: 'leg'},
-                {type: 'cardio'},
-              ].map(({type}) => (
+
+              {currentScheduleList && currentScheduleList.map((type) => (
                 <ScheduleTypeBox
-                  key={type}
-                  title={type}
+                  key={type.schedule.scheduleId}
+                  title={type.schedule.scheduleType}
                   onPress={() => {
-                    setSelectedScheduleType(type);
+                    setSelectedScheduleType(type.schedule.scheduleType);
                   }}
-                  isFocused={selectedScheduleType === type ? true : false}
+                  isFocused={selectedScheduleType === type.schedule.scheduleType ? true : false}
                 />
               ))}
             </View>
           </ScrollView>
         </View>
         <ScrollView nestedScrollEnabled style={style.bottomContainer}>
-          <ExerciseBoxCard
-            exerciseName="Bench Press"
-            sets={3}
-            reps={10}
-            duration={0}
+          {
+            currentScheduleList && currentScheduleList.filter((todaySchedule)=>(
+              todaySchedule.schedule.scheduleType ===selectedScheduleType
+            )).map((scheduleList)=>(scheduleList.exerciseList.map((exercise)=>(
+              <ExerciseBoxCard
+            key={exercise.exerciseName}
+            url={exercise.exerciseUrl}
+            exerciseName={exercise.exerciseName}
+            sets={exercise.sets}
+            reps={exercise.reps}
+            duration={exercise.duration}
           />
-          <ExerciseBoxCard
-            exerciseName="Cycling"
-            sets={0}
-            reps={0}
-            duration={20}
-          />
-          <ExerciseBoxCard
-            exerciseName="Lat Pull Down"
-            sets={3}
-            reps={10}
-            duration={0}
-          />
-          <ExerciseBoxCard
-            exerciseName="Treadmill"
-            sets={0}
-            reps={0}
-            duration={20}
-          />
+            ))))
+            
+          }
         </ScrollView>
       </View>
     </SafeAreaView>
