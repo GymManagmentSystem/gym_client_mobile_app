@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import {  AxiosError } from "axios"
+import axios, {  AxiosError } from "axios"
 import axiosInstance from '../api/AxiosInstance'
 
 
@@ -28,6 +28,7 @@ const useLogin = () => {
                         password:password,
                         userType:"MEMBER"
                 })
+                axios.defaults.headers.common['Authorization']=`Bearer ${data.token}`
                 return data;
             }catch(e){
                 if(e instanceof AxiosError){

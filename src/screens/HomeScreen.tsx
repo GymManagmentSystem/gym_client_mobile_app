@@ -13,12 +13,13 @@ import ThemeText from '../components/ThemeText';
 import {getGreeting} from '../utility/Greeting';
 import ScheduleTypeBox from '../components/ScheduleTypeBox';
 import ExerciseBoxCard from '../components/ExerciseBoxCard';
-import useUserNameStore from '../store/useNameStore';
+import useUserDataStore from '../store/useNameStore';
+import useGetCurrentSchedules from '../hooks/useGetCurrentSchedules';
 
 const HomeScreen = () => {
   const theme = useTheme();
-  const userNameStore=useUserNameStore()
-
+  const userDataStore = useUserDataStore();
+  const {data:currentScheduleList,error,isLoading}=useGetCurrentSchedules(userDataStore.loggedMmeberId)
 
   const [selectedScheduleType, setSelectedScheduleType] =
     useState<string>('chest');
@@ -34,7 +35,7 @@ const HomeScreen = () => {
           {getGreeting()}
         </ThemeText>
         <ThemeText fontType="primary" fontSize="large" fontStyle="semiBold">
-          {userNameStore.loggedUserName}
+          {userDataStore.loggedUserName}
         </ThemeText>
       </View>
       <ImageBackground
@@ -139,7 +140,7 @@ const style = StyleSheet.create({
     marginTop: getHeightPercentage(10),
     height: getHeightPercentage(250),
     width: getWidthPercentage(361),
-    paddingLeft:getWidthPercentage(16)
+    paddingLeft: getWidthPercentage(16),
   },
   scheduleTypeContainer: {
     marginTop: getHeightPercentage(30),
@@ -166,6 +167,6 @@ const style = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     gap: 10,
-    flex:1,
+    flex: 1,
   },
 });
