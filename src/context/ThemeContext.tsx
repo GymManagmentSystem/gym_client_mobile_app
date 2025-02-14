@@ -8,6 +8,12 @@ type Theme = {
       primary: string;
       secondary: string;
       tertiory:string;
+      quaternary:{
+        primary:string,
+        secondary:string
+        highLight:string
+      }
+      other:string
     };
     text: string;
     error: string;
@@ -59,7 +65,13 @@ const theme: Theme = {
     background: {
       primary: '#242525',
       secondary: '#535353',
-      tertiory:"#1A1A1C"
+      tertiory:"#1A1A1C",
+      quaternary:{        //gray colour varient
+        primary:"#535353",
+        secondary:"#8F918F",
+        highLight:"#5C635D"
+      },
+      other:"#fff"
     },
     text: '#000',
     error: 'red',
