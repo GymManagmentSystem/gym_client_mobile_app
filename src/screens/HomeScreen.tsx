@@ -15,15 +15,47 @@ import ScheduleTypeBox from '../components/ScheduleTypeBox';
 import ExerciseBoxCard from '../components/ExerciseBoxCard';
 import useUserDataStore from '../store/useNameStore';
 import useGetCurrentSchedules from '../hooks/useGetCurrentSchedules';
+import CustomModal from '../modals/CustomModal';
+import LoadingActivityIndicator from '../modals/LoadingActivityIndicator';
+import {useQueryClient} from '@tanstack/react-query';
 
 const HomeScreen = () => {
   const theme = useTheme();
   const userDataStore = useUserDataStore();
-  const {data:currentScheduleList,error,isLoading}=useGetCurrentSchedules(userDataStore.loggedMmeberId)
+  const {
+    data: currentScheduleList,
+    error,
+    isLoading,
+    isError,
+  } = useGetCurrentSchedules(userDataStore.loggedMmeberId);
+
+  const todayNameStr = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+  });
 
   const [selectedScheduleType, setSelectedScheduleType] =
-    useState<string>('chest');
+    useState<string>('Arms');
 
+  const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isError) {
+      setShowErrorModal(true);
+    }
+  }, [isError]);
+
+  const queryClinet = useQueryClient();
+
+  const todayScheduleTypeStr = currentScheduleList
+    ? currentScheduleList.find(
+        todaySchedule =>
+          todaySchedule.schedule.scheduleDay1 === todayNameStr ||
+          todaySchedule.schedule.scheduleDay2 === todayNameStr,
+      )?.schedule.scheduleType || 'Rest'
+    : 'Rest';
+
+  const [todayScheduleType, settodayScheduleType] =
+    useState<string>(todayScheduleTypeStr);
 
   return (
     <SafeAreaView
@@ -31,43 +63,86 @@ const HomeScreen = () => {
         style.mainContainer,
         {backgroundColor: theme.colors.background.primary},
       ]}>
+      <View>
+        {showErrorModal && (
+          <CustomModal
+            message={error?.message || 'unexpected error'}
+            modalType="error"
+            visibility={showErrorModal}
+            onClick={() => {
+              setShowErrorModal(false);
+              queryClinet.invalidateQueries([
+                'currentScheduleList',
+                userDataStore.loggedMmeberId,
+              ]);
+            }}
+          />
+        )}
+        <LoadingActivityIndicator
+          title="Loading Schedules..."
+          visibility={isLoading}
+        />
+      </View>
+
       <View style={style.greetingContainer}>
         <ThemeText fontType="primary" fontSize="medium" fontStyle="medium">
           {getGreeting()}
         </ThemeText>
-        <ThemeText fontType="primary" fontSize="large" fontStyle="semiBold">
+        <ThemeText fontType="primary" fontSize="small" fontStyle="semiBold">
           {userDataStore.loggedUserName}
         </ThemeText>
       </View>
-      <ImageBackground
-        borderRadius={20}
-        style={style.homeImageConatiner}
-        source={require('../../assets/images/updatedHomeImage.png')}>
-        <View style={style.scheduleTypeContainer}>
-          <ThemeText
-            fontType="secondary"
-            fontSize="xmedium"
-            fontStyle="regular">
-            Today is your
-          </ThemeText>
-          <ThemeText
-            fontType="secondary"
-            fontSize="xmedium"
-            fontStyle="bold"
-            fontColor="other">
-            Chest Day
-          </ThemeText>
+      <View
+        style={[
+          style.homeContainer,
+          {backgroundColor: theme.colors.background.secondary},
+        ]}>
+        <View style={style.homeTextConatiner}>
+          <View style={style.scheduleTypeContainer}>
+            <ThemeText
+              fontType="secondary"
+              fontSize="medium"
+              fontStyle="regular"
+              fontColor="other">
+              Today  is  your
+            </ThemeText>
+            <ThemeText
+              fontType="secondary"
+              fontSize="medium"
+              fontStyle="bold"
+              fontColor="other">
+              {`${todayScheduleType}  Day`}
+            </ThemeText>
+          </View>
+          <View style={style.motivationTextContainer}>
+            <ThemeText
+              fontType="secondary"
+              fontSize="xsmall"
+              fontStyle="regular"
+              fontColor="primary">
+              Stay  focused,  lift
+            </ThemeText>
+            <ThemeText
+              fontType="secondary"
+              fontSize="xsmall"
+              fontStyle="regular"
+              fontColor="primary">
+              strong, and  make
+            </ThemeText>
+            <ThemeText
+              fontType="secondary"
+              fontSize="xsmall"
+              fontStyle="regular"
+              fontColor="primary">
+              every rep count!
+            </ThemeText>
+          </View>
         </View>
-
-        <View style={style.motivationTextContainer}>
-          <ThemeText fontType="secondary" fontSize="medium" fontStyle="bold">
-            Stay focused, lift strong, and make
-          </ThemeText>
-          <ThemeText fontType="secondary" fontSize="medium" fontStyle="bold">
-            every rep count!
-          </ThemeText>
-        </View>
-      </ImageBackground>
+        <ImageBackground
+          
+          style={style.homeImageConatiner}
+          source={require('../../assets/images/homeBackgroundImage.png')}></ImageBackground>
+      </View>
 
       <View style={style.bodyContainer}>
         <View style={style.middleContainer}>
@@ -77,36 +152,43 @@ const HomeScreen = () => {
 
           <ScrollView horizontal={true}>
             <View style={style.scheduleBoxContainer}>
-
-              {currentScheduleList && currentScheduleList.map((type) => (
-                <ScheduleTypeBox
-                  key={type.schedule.scheduleId}
-                  title={type.schedule.scheduleType}
-                  onPress={() => {
-                    setSelectedScheduleType(type.schedule.scheduleType);
-                  }}
-                  isFocused={selectedScheduleType === type.schedule.scheduleType ? true : false}
-                />
-              ))}
+              {currentScheduleList &&
+                currentScheduleList.map(type => (
+                  <ScheduleTypeBox
+                    key={type.schedule.scheduleId}
+                    title={type.schedule.scheduleType}
+                    onPress={() => {
+                      setSelectedScheduleType(type.schedule.scheduleType);
+                    }}
+                    isFocused={
+                      selectedScheduleType === type.schedule.scheduleType
+                        ? true
+                        : false
+                    }
+                  />
+                ))}
             </View>
           </ScrollView>
         </View>
         <ScrollView nestedScrollEnabled style={style.bottomContainer}>
-          {
-            currentScheduleList && currentScheduleList.filter((todaySchedule)=>(
-              todaySchedule.schedule.scheduleType ===selectedScheduleType
-            )).map((scheduleList)=>(scheduleList.exerciseList.map((exercise)=>(
-              <ExerciseBoxCard
-            key={exercise.exerciseName}
-            url={exercise.exerciseUrl}
-            exerciseName={exercise.exerciseName}
-            sets={exercise.sets}
-            reps={exercise.reps}
-            duration={exercise.duration}
-          />
-            ))))
-            
-          }
+          {currentScheduleList &&
+            currentScheduleList
+              .filter(
+                todaySchedule =>
+                  todaySchedule.schedule.scheduleType === selectedScheduleType,
+              )
+              .map(scheduleList =>
+                scheduleList.exerciseList.map(exercise => (
+                  <ExerciseBoxCard
+                    key={exercise.exerciseName}
+                    url={exercise.exerciseUrl}
+                    exerciseName={exercise.exerciseName}
+                    sets={exercise.sets}
+                    reps={exercise.reps}
+                    duration={exercise.duration}
+                  />
+                )),
+              )}
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -124,21 +206,37 @@ const style = StyleSheet.create({
   greetingContainer: {
     marginTop: getHeightPercentage(20),
   },
+  homeContainer: {
+    marginTop:getHeightPercentage(20),
+    width: getWidthPercentage(370),
+    height: getHeightPercentage(205),
+    borderRadius: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    paddingLeft: getWidthPercentage(16),
+  },
+  homeTextConatiner: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
   homeImageConatiner: {
-    marginTop: getHeightPercentage(10),
-    height: getHeightPercentage(250),
-    width: getWidthPercentage(361),
+    height: getHeightPercentage(205),
+    width: getWidthPercentage(200),
     paddingLeft: getWidthPercentage(16),
   },
   scheduleTypeContainer: {
-    marginTop: getHeightPercentage(30),
+    marginTop: getHeightPercentage(28),
   },
   motivationTextContainer: {
-    marginTop: getHeightPercentage(100),
+    marginTop: getHeightPercentage(30),
     alignItems: 'center',
   },
   bodyContainer: {
-    marginTop: getHeightPercentage(10),
+    marginTop: getHeightPercentage(20),
     marginBottom: 10,
     flex: 1,
   },
@@ -149,6 +247,7 @@ const style = StyleSheet.create({
     marginTop: getHeightPercentage(10),
   },
   scheduleBoxContainer: {
+    marginTop: getHeightPercentage(15),
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-evenly',

@@ -28,7 +28,7 @@ const ExerciseBoxCard = ({
         {backgroundColor: theme.colors.background.secondary},
       ]}>
       <View style={style.imageConatiner}>
-        <Image source={{uri:url}} />
+        <Image source={{uri:url}} style={style.image}/>
       </View>
       <View style={style.exerciseDataContainer}>
         <ThemeText
@@ -106,13 +106,16 @@ const style = StyleSheet.create({
     marginTop: 10,
   },
   imageConatiner: {
+    marginTop:5,
     width: getWidthPercentage(105),
-    height: getHeightPercentage(88),
-    borderRadius: 20,
+    height: getHeightPercentage(80),
+    justifyContent:"center",
+    alignItems:"center"
   },
   image: {
     width: '100%',
     height: '100%',
+    borderRadius:20
   },
   exerciseDataContainer: {
     display: 'flex',
