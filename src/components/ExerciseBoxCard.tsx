@@ -7,8 +7,9 @@ import ThemeText from './ThemeText';
 interface ExerciseCardProps {
   exerciseName: string;
   sets: number;
-  reps: number;
+  reps: string;
   duration: number;
+  url:string
 }
 
 const ExerciseBoxCard = ({
@@ -16,7 +17,9 @@ const ExerciseBoxCard = ({
   sets,
   reps,
   duration,
+  url
 }: ExerciseCardProps) => {
+  console.log(url)
   const theme = useTheme();
   return (
     <View
@@ -25,7 +28,7 @@ const ExerciseBoxCard = ({
         {backgroundColor: theme.colors.background.secondary},
       ]}>
       <View style={style.imageConatiner}>
-        <Image source={require('../../assets/images/exerciseImage.png')} />
+        <Image source={{uri:url}} style={style.image}/>
       </View>
       <View style={style.exerciseDataContainer}>
         <ThemeText
@@ -51,7 +54,7 @@ const ExerciseBoxCard = ({
               </ThemeText>
             </View>
           )}
-          {reps > 0 && (
+          {reps && (
             <View
               style={[
                 style.repsSetBox,
@@ -62,7 +65,7 @@ const ExerciseBoxCard = ({
                 fontSize="xsmall"
                 fontStyle="medium"
                 fontColor="tertiory">
-                {`${reps} reps`}
+                {`${reps.split('-')[0]} reps`}
               </ThemeText>
             </View>
           )}
@@ -103,13 +106,16 @@ const style = StyleSheet.create({
     marginTop: 10,
   },
   imageConatiner: {
+    marginTop:5,
     width: getWidthPercentage(105),
-    height: getHeightPercentage(88),
-    borderRadius: 20,
+    height: getHeightPercentage(80),
+    justifyContent:"center",
+    alignItems:"center"
   },
   image: {
     width: '100%',
     height: '100%',
+    borderRadius:20
   },
   exerciseDataContainer: {
     display: 'flex',

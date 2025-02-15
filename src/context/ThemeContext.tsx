@@ -14,7 +14,8 @@ type Theme = {
         secondary:string
         highLight:string
       }
-      other:string
+      other:string,
+      highlight:string
     };
     text: string;
     error: string;
@@ -71,7 +72,8 @@ const theme: Theme = {
         secondary:"#8F918F",
         highLight:"#5C635D"
       },
-      other:"#fff"
+      other:"#fff",
+      highlight:"#F1B900"
     },
     text: '#000',
     error: 'red',

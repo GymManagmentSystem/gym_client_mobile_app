@@ -12,14 +12,14 @@ interface ScheduleTypeBoxProp {
 
 const ScheduleTypeBox = ({title,onPress,isFocused}: ScheduleTypeBoxProp) => {
   const theme = useTheme();
-  const textColor=isFocused?"other":"tertiory"
-  const bgColor=isFocused?theme.colors.background.quaternary.highLight:theme.colors.background.other
+  const textColor=isFocused?"tertiory":"primary"
+  const bgColor=isFocused?theme.colors.background.highlight:theme.colors.background.secondary
   return (
     <TouchableHighlight
     onPress={onPress}
       style={[
         style.cardContainer,
-        {backgroundColor: bgColor},
+        {backgroundColor: bgColor,borderColor:theme.colors.secondary},
       ]}>
       <ThemeText fontSize="xsmall" fontType="primary" fontStyle="medium" fontColor={textColor}>
         {title}
@@ -37,6 +37,10 @@ const style = StyleSheet.create({
     alignItems: 'center',
     width: getWidthPercentage(100),
     height: getHeightPercentage(30),
-    borderRadius:10
+    borderRadius:10,
+    borderBottomWidth:0.2,
+    borderTopWidth:1,
+    borderLeftWidth:1,
+    borderRightWidth:1
   },
 });

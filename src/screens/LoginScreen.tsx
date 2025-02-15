@@ -14,7 +14,7 @@ import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
 import useLogin from '../hooks/useLogin';
 import CustomModal from '../modals/CustomModal';
 import LoadingActivityIndicator from '../modals/LoadingActivityIndicator';
-import useUserNameStore from '../store/useNameStore';
+import useUserDataStore from '../store/useNameStore';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   MainStackNavigationList,
@@ -51,7 +51,7 @@ const LoginScreen = () => {
 
   const theme = useTheme();
 
-  const userNameStore=useUserNameStore()
+  const userDataStore = useUserDataStore();
 
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const {
@@ -66,13 +66,19 @@ const LoginScreen = () => {
     setUserName(userCredentials.userName);
     loginRequest.mutate(userCredentials, {
       onSuccess: data => {
-        let memberType = data.successMessage.split(':')[1].trim();
-        console.log(memberType);
+        console.log(data);
+        const parts = data.successMessage.split(',');
+        const memberType = parts[0].split(': ')[1];
+        const memberId = parts[1].split(': ')[1];
+
+        console.log(memberId, memberType);
+
         if (memberType === 'New Member') {
           setModalMessage('Reset your password at first Login');
           setPasswordResetSuccessModalVisibility(true);
         } else {
-          userNameStore.setUserName(userCredentials.userName)
+          userDataStore.setUserName(userCredentials.userName);
+          userDataStore.setLoggedMemberId(Number.parseInt(memberId))
           setModalMessage('Login Succesfull');
           setSuccessModalVisibility(true);
         }
@@ -85,11 +91,12 @@ const LoginScreen = () => {
   };
 
   const passwordResetSuccessNavigate = () => {
-    navigation.navigate('BottomStackScreens');
+    navigation.navigate('ChangePasswordScreen', {userName});
     setPasswordResetSuccessModalVisibility(false);
   };
 
   const successNavigate = () => {
+    navigation.navigate('BottomStackScreens');
     setSuccessModalVisibility(false);
   };
 

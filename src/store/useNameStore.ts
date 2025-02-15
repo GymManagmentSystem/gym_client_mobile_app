@@ -1,13 +1,17 @@
 import {create} from 'zustand'
 
-interface UserNameStore{
+interface UserDataStore{
     loggedUserName:string,
+    loggedMmeberId:number,
     setUserName:(name:string)=>void
+    setLoggedMemberId:(id:number)=>void
 }
 
-const useUserNameStore=create<UserNameStore>(set=>({
+const useUserDataStore=create<UserDataStore>(set=>({
     loggedUserName:"",
-    setUserName:(userName:string)=>set(()=>({loggedUserName:userName}))
+    loggedMmeberId:0,
+    setUserName:(userName:string)=>set(()=>({loggedUserName:userName})),
+    setLoggedMemberId:(userId:number)=>set(()=>({loggedMmeberId:userId}))
 }))
 
-export default useUserNameStore;
+export default useUserDataStore;
