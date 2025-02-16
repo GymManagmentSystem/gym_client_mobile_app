@@ -6,16 +6,22 @@ import { useTheme } from '../context/ThemeContext';
 import ExerciseSetTickBox from './ExerciseSetTickBox';
 
 
-// 
+interface ExerciseTrackingCardProps{
+    exerciseName:string,
+    isDisabale:boolean,
+    sets:number,
+    reps:string
+}
 
 
 
-const ExerciseTrackingCard = () => {
+const ExerciseTrackingCard = ({exerciseName,isDisabale,sets,reps}:ExerciseTrackingCardProps) => {
     const theme=useTheme();
-
+    const backgroundColor=isDisabale?theme.colors.background.other:theme.colors.background.highlight
+    const setsRepsBackgroundColor=isDisabale?theme.colors.background.quaternary.primary:theme.colors.background.primary
 
   return (
-    <View style={[style.exerciseTrackingCardContainer,{backgroundColor:theme.colors.background.highlight}]}>
+    <View style={[style.exerciseTrackingCardContainer,{backgroundColor}]}>
       <View style={style.exerciseDetailsContainer}>
         <View style={style.dateConatiner}>
           <View style={[style.dateImageContainer,{backgroundColor:theme.colors.background.primary}]}>
@@ -37,20 +43,20 @@ const ExerciseTrackingCard = () => {
           </View>
         </View>
         <View style={style.exerciseNameContainer}>
-        <ThemeText fontType='primary' fontStyle='medium' fontSize='medium' fontColor='tertiory'>Bench Press</ThemeText>
+        <ThemeText fontType='primary' fontStyle='medium' fontSize='medium' fontColor='tertiory'>{exerciseName}</ThemeText>
         </View>
         <View style={style.repSetContainer}>
-            <View style={[style.repsSetBox,{backgroundColor:theme.colors.background.quaternary.primary}]}>
-                <ThemeText fontType='primary' fontStyle='medium' fontSize='small' fontColor='primary'>3 sets</ThemeText>
+            <View style={[style.repsSetBox,{backgroundColor:setsRepsBackgroundColor}]}>
+                <ThemeText fontType='primary' fontStyle='medium' fontSize='small' fontColor='primary'>{`${sets} sets`}</ThemeText>
             </View>
-            <View style={[style.repsSetBox,{backgroundColor:theme.colors.background.quaternary.primary}]}>
-                <ThemeText fontType='primary' fontStyle='medium' fontSize='small' fontColor='primary'>3 sets</ThemeText>
+            <View style={[style.repsSetBox,{backgroundColor:setsRepsBackgroundColor}]}>
+                <ThemeText fontType='primary' fontStyle='medium' fontSize='small' fontColor='primary'>{`${reps} reps`}</ThemeText>
             </View>
         </View>
         <View style={style.setsConatiner}>
-            <ExerciseSetTickBox/>
-            <ExerciseSetTickBox/>
-            <ExerciseSetTickBox/>
+            <ExerciseSetTickBox isDisable={isDisabale}/>
+            <ExerciseSetTickBox isDisable={isDisabale}/>
+            <ExerciseSetTickBox isDisable={isDisabale}/>
         </View>
       </View>
       <View style={[style.exerciseImageConatiner,{borderLeftColor:theme.colors.background.quaternary.secondary,borderLeftWidth:2}]}>
@@ -64,6 +70,7 @@ export default ExerciseTrackingCard;
 
 const style = StyleSheet.create({
   exerciseTrackingCardContainer: {
+    marginTop:10,
     width: getWidthPercentage(370),
     height: getHeightPercentage(173),
     display: 'flex',

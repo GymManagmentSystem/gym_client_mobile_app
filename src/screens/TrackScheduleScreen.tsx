@@ -17,7 +17,10 @@ const TrackScheduleScreen = () => {
   console.log(todaySchedule)
   return (
     <View style={[style.mainContainer,{backgroundColor:theme.colors.background.primary}]}>
-        <ExerciseTrackingCard/>
+        <ExerciseTrackingCard exerciseName='Bench press' sets={3} reps='10' isDisabale={false}/>
+        <ExerciseTrackingCard exerciseName='Lat pull down' sets={3} reps='10' isDisabale={true}/>
+        <ExerciseTrackingCard exerciseName='Dumble up' sets={3} reps='10' isDisabale={true}/>
+        <ExerciseTrackingCard exerciseName='Leg press' sets={3} reps='10' isDisabale={true}/>
     </View>
   )
 }
