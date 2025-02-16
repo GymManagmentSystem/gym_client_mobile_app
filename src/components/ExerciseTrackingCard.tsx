@@ -18,10 +18,11 @@ interface ExerciseTrackingCardProps{
 const ExerciseTrackingCard = ({exerciseName,isDisabale,sets,reps}:ExerciseTrackingCardProps) => {
     const theme=useTheme();
     const backgroundColor=isDisabale?theme.colors.background.other:theme.colors.background.highlight
+    const opacity=isDisabale?0.8:1
     const setsRepsBackgroundColor=isDisabale?theme.colors.background.quaternary.primary:theme.colors.background.primary
 
   return (
-    <View style={[style.exerciseTrackingCardContainer,{backgroundColor}]}>
+    <View style={[style.exerciseTrackingCardContainer,{backgroundColor,opacity}]}>
       <View style={style.exerciseDetailsContainer}>
         <View style={style.dateConatiner}>
           <View style={[style.dateImageContainer,{backgroundColor:theme.colors.background.primary}]}>
@@ -71,14 +72,14 @@ export default ExerciseTrackingCard;
 const style = StyleSheet.create({
   exerciseTrackingCardContainer: {
     marginTop:10,
-    width: getWidthPercentage(370),
+    width: getWidthPercentage(355),
     height: getHeightPercentage(173),
     display: 'flex',
     flexDirection: 'row',
     borderRadius: 20,
   },
   exerciseDetailsContainer: {
-    width: getWidthPercentage(214),
+    width: getWidthPercentage(198),
     height: getHeightPercentage(173),
     display: 'flex',
     flexDirection: 'column',
@@ -127,11 +128,13 @@ const style = StyleSheet.create({
     justifyContent:"space-evenly"
   },
   exerciseImageConatiner:{
-    width:getWidthPercentage(156),
+    width:getWidthPercentage(157),
     height:getHeightPercentage(173)
   },
   image:{
     width:"100%",
-    height:"100%"
+    height:"100%",
+    borderTopRightRadius:20,
+    borderBottomRightRadius:20
   }
 });
