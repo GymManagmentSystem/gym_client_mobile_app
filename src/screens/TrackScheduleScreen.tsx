@@ -18,6 +18,8 @@ const TrackScheduleScreen = () => {
   return (
     <View style={[style.mainContainer,{backgroundColor:theme.colors.background.primary}]}>
         <ExerciseTrackingCard exerciseName='Bench press' sets={3} reps='10' isDisabale={false}/>
+        <ExerciseTrackingCard exerciseName='treadmill' duration={5} isDisabale={false}/>
+        <ExerciseTrackingCard exerciseName='cycling' duration={1} isDisabale={false}/>
         <ExerciseTrackingCard exerciseName='Lat pull down' sets={3} reps='10' isDisabale={true}/>
         <ExerciseTrackingCard exerciseName='Dumble up' sets={3} reps='10' isDisabale={true}/>
         <ExerciseTrackingCard exerciseName='Leg press' sets={3} reps='10' isDisabale={true}/>
