@@ -68,7 +68,7 @@ const theme: Theme = {
       primary: '#000',
       secondary: '#1A1A1C',
       quaternary:{        //gray colour varient
-        primary:"#535353",
+        primary:"#8F918F",
         secondary:"#989898",
         highLight:"#5C635D"
       },

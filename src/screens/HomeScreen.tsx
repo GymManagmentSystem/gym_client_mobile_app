@@ -126,14 +126,16 @@ const HomeScreen = () => {
               fontType="secondary"
               fontSize="xsmall"
               fontStyle="regular"
-              fontColor="primary">
+              fontColor="primary"
+              style={{marginTop:5}}>
               strong, and  make
             </ThemeText>
             <ThemeText
               fontType="secondary"
               fontSize="xsmall"
               fontStyle="regular"
-              fontColor="primary">
+              fontColor="primary"
+              style={{marginTop:5}}>
               every rep count!
             </ThemeText>
           </View>

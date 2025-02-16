@@ -23,6 +23,7 @@ const BottomStackNavigation = () => {
 
   return (
     <Tab.Navigator
+    initialRouteName='TrackScheduleScreen'
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
