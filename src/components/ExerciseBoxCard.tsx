@@ -35,7 +35,7 @@ const ExerciseBoxCard = ({
           fontType="primary"
           fontSize="small"
           fontStyle="medium"
-          fontColor="other">
+          fontColor="primary">
           {exerciseName}
         </ThemeText>
         <View style={style.repsSetContainer}>
@@ -43,7 +43,7 @@ const ExerciseBoxCard = ({
             <View
               style={[
                 style.repsSetBox,
-                {backgroundColor: theme.colors.background.other},
+                {backgroundColor: theme.colors.background.quaternary.secondary},
               ]}>
               <ThemeText
                 fontType="primary"
@@ -58,7 +58,7 @@ const ExerciseBoxCard = ({
             <View
               style={[
                 style.repsSetBox,
-                {backgroundColor: theme.colors.background.other},
+                {backgroundColor: theme.colors.background.quaternary.secondary},
               ]}>
               <ThemeText
                 fontType="primary"
@@ -73,7 +73,7 @@ const ExerciseBoxCard = ({
             <View
               style={[
                 style.durationBox,
-                {backgroundColor: theme.colors.background.other},
+                {backgroundColor: theme.colors.background.quaternary.secondary},
               ]}>
               <ThemeText
                 fontType="primary"
