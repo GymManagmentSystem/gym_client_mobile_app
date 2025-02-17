@@ -3,7 +3,7 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import useUserDataStore from '../store/useNameStore'
 import ExerciseTrackingCard from '../components/ExerciseTrackingCard'
-import { getHeightPercentage, getWidthPercentage } from '../utility/Dimensions'
+import {  getWidthPercentage } from '../utility/Dimensions'
 import { useTheme } from '../context/ThemeContext'
 
 
