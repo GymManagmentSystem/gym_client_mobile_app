@@ -5,23 +5,27 @@ import ThemeText from './ThemeText';
 import {useTheme} from '../context/ThemeContext';
 import ExerciseSetTickBox from './ExerciseSetTickBox';
 import ExerciseTimer from './ExerciseTimer';
+import {useScheduleExerciseStore} from '../store/useTodayScheduleStore';
 
 interface ExerciseTrackingCardProps {
   exerciseName: string;
-  isDisabale: boolean;
   sets?: number;
   reps?: string;
-  duration?: number;
+  exerciseUrl: string;
 }
 
 const ExerciseTrackingCard = ({
   exerciseName,
-  isDisabale,
   sets,
   reps,
-  duration,
+  exerciseUrl,
 }: ExerciseTrackingCardProps) => {
   const theme = useTheme();
+  const exerciseDetails = useScheduleExerciseStore();
+
+  const isDisabale =
+    exerciseDetails.getExerciseByName(exerciseName)?.exerciseStatus;
+
   const backgroundColor = isDisabale
     ? theme.colors.background.other
     : theme.colors.background.highlight;
@@ -77,8 +81,7 @@ const ExerciseTrackingCard = ({
           </ThemeText>
         </View>
 
-
-        {sets && (
+        {sets && sets > 0 ? (
           <View>
             <View style={style.repSetContainer}>
               <View
@@ -105,18 +108,14 @@ const ExerciseTrackingCard = ({
               </View>
             </View>
             <View style={style.setsConatiner}>
-              <ExerciseSetTickBox isDisable={isDisabale} />
-              <ExerciseSetTickBox isDisable={isDisabale} />
-              <ExerciseSetTickBox isDisable={isDisabale} />
+              {Array.from({length: sets}, (_, index) => (
+                <ExerciseSetTickBox key={index} exerciseName={exerciseName} />
+              ))}
             </View>
           </View>
+        ) : (
+          <ExerciseTimer exerciseName={exerciseName} />
         )}
-
-        {duration &&(
-            <ExerciseTimer isDisable={isDisabale} duration={duration}/>
-        )}
-
-
       </View>
       <View
         style={[
@@ -128,7 +127,7 @@ const ExerciseTrackingCard = ({
         ]}>
         <Image
           source={{
-            uri: 'https://as1.ftcdn.net/v2/jpg/03/88/21/62/1000_F_388216207_WWVXeq5k4tnMYfCrVG5qf9IfBswmb7Rx.jpg',
+            uri: exerciseUrl,
           }}
           style={style.image}
         />
