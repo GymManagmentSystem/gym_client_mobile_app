@@ -23,14 +23,14 @@ const ExerciseTrackingCard = ({
   const theme = useTheme();
   const exerciseDetails = useScheduleExerciseStore();
 
-  const isDisabale =
+  const exerciseStatus =
     exerciseDetails.getExerciseByName(exerciseName)?.exerciseStatus;
 
-  const backgroundColor = isDisabale
+  const backgroundColor = exerciseStatus =="Pending"
     ? theme.colors.background.other
     : theme.colors.background.highlight;
-  const opacity = isDisabale ? 0.8 : 1;
-  const setsRepsBackgroundColor = isDisabale
+  const opacity = exerciseStatus=='OnGoing' ? 1 : 0.8;
+  const setsRepsBackgroundColor = exerciseStatus=='Pending'
     ? theme.colors.background.quaternary.primary
     : theme.colors.background.primary;
 

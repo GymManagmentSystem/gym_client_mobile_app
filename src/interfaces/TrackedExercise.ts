@@ -1,6 +1,6 @@
 export interface TrackedExercise{
     exerciseName:string,
-    exerciseStatus:boolean,
+    exerciseStatus:"Pending"|"OnGoing"|"Completed",
     totalSets: number,
     duration:number,
     totalDuration:number

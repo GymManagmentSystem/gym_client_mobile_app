@@ -29,10 +29,10 @@ const ExerciseTimer = ({exerciseName}: ExerciseTimer) => {
     }
   }, [selectedExercise]);
 
-  const backgroundColor = selectedExerciseStatus?.exerciseStatus
+  const backgroundColor = selectedExerciseStatus?.exerciseStatus==="Pending"
     ? theme.colors.background.quaternary.secondary
     : theme.colors.background.other;
-  const fontColor = selectedExerciseStatus?.exerciseStatus
+  const fontColor = selectedExerciseStatus?.exerciseStatus==="Pending"
     ? 'primary'
     : 'tertiory';
 
@@ -56,7 +56,7 @@ const ExerciseTimer = ({exerciseName}: ExerciseTimer) => {
                 setRunning(false);
                 exerciseDetailsStore.updateScheduleExercise(
                   exerciseName,
-                  selectedExerciseStatus.totalDuration,
+                  selectedExerciseStatus.duration,
                 );
                 return prevState;
               }
@@ -65,11 +65,11 @@ const ExerciseTimer = ({exerciseName}: ExerciseTimer) => {
         1000,
       );
     } else if (selectedExerciseStatus?.duration == 0) {
-      console.log("i'm catching in first condition dear");
+      console.log("i'm catching in second condition dear");
       setRunning(false);
       exerciseDetailsStore.updateScheduleExercise(
         exerciseName,
-        selectedExerciseStatus.totalDuration,
+        selectedExerciseStatus.duration,
       );
     } else {
       if (timeRef.current) clearInterval(timeRef.current);
@@ -89,7 +89,7 @@ const ExerciseTimer = ({exerciseName}: ExerciseTimer) => {
     <View style={style.conatiner}>
       <View style={style.progressBarContainer}>
         <TouchableOpacity
-          disabled={selectedExercise?.exerciseStatus}
+          disabled={selectedExercise?.exerciseStatus==="OnGoing"?false:true}
           onPress={() => {
             exerciseDetailsStore.updateScheduleExercise(
               exerciseName,
