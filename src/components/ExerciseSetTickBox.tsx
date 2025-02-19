@@ -2,13 +2,17 @@ import React, {useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {getHeightPercentage, getWidthPercentage} from '../utility/Dimensions';
 import {useTheme} from '../context/ThemeContext';
+import { useScheduleExerciseStore } from '../store/useTodayScheduleStore';
+
 
 interface ExerciseSetTickBoxProps {
-  isDisable: boolean;
+  exerciseName:string
 }
 
-const ExerciseSetTickBox = ({isDisable}: ExerciseSetTickBoxProps) => {
+const ExerciseSetTickBox = ({exerciseName}: ExerciseSetTickBoxProps) => {
   const theme = useTheme();
+  const exerciseDetails=useScheduleExerciseStore();
+  const isDisable=exerciseDetails.getExerciseByName(exerciseName)?.exerciseStatus;
   const [showImage, setShowImage] = useState<boolean>(false);
   const backgroundColor = isDisable
     ? theme.colors.background.quaternary.primary
@@ -18,7 +22,10 @@ const ExerciseSetTickBox = ({isDisable}: ExerciseSetTickBoxProps) => {
     <TouchableOpacity
       style={[style.tickBoxContainer, {backgroundColor}]}
       disabled={isDisable}
-      onPress={() => setShowImage(true)}>
+      onPress={() => {
+        setShowImage(true)
+        exerciseDetails.updateScheduleExercise(exerciseName)
+        }}>
       {showImage && (
         <Image
           source={require('../../assets/icons/tickIcon.png')}
