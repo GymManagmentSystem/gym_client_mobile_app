@@ -6,9 +6,10 @@ import { TrackedExercise } from "../interfaces/TrackedExercise";
 
 interface ScheduleState{
     scheduleExerciseList:TrackedExercise[],
-    getExerciseByName:(exerciseName:string)=>TrackedExercise|null;
+    getExerciseByName:(exerciseName:string)=>TrackedExercise|null,
     setInitialScheduleExercise:(exercises:TrackedExercise[])=>void,
-    updateScheduleExercise:(exerciseName:string,remainingTime?:number)=>void
+    updateScheduleExercise:(exerciseName:string,remainingTime?:number)=>void,
+    getNoOfCompletedExercise:()=>number
 }
 
 export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
@@ -97,5 +98,14 @@ export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
 
             }
         })
+    },
+    getNoOfCompletedExercise:()=>{
+        let completedExercises:number=0
+         get().scheduleExerciseList.map((exercise)=>{
+            if(!exercise.exerciseStatus){
+                completedExercises=completedExercises+1
+            }
+         })
+         return completedExercises;
     }
 }))
