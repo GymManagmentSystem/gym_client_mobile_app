@@ -26,7 +26,7 @@ export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
                     duration:exercise.duration??0,
                     totalDuration:exercise.duration??0,
                     completedSets:0,
-                    exerciseStatus:index==0?false:true
+                    exerciseStatus:index==0?"OnGoing":"Pending"
                 }))
                 console.log("initializes list is : ",JSON.stringify(initializedExerciseList));
                 return{scheduleExerciseList:initializedExerciseList}
@@ -60,9 +60,13 @@ export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
 
                 return {
                     scheduleExerciseList:store.scheduleExerciseList.map((exercise,index)=>{
+                        if (index === currentIndex) {
+                            console.log("next exercise is : "+exercise.exerciseName)
+                            return { ...exercise, exerciseStatus: "Completed" }; // Mark next exercise as active
+                        }
                         if (index === currentIndex + 1) {
                             console.log("next exercise is : "+exercise.exerciseName)
-                            return { ...exercise, exerciseStatus: false }; // Mark next exercise as active
+                            return { ...exercise, exerciseStatus: "OnGoing" }; // Mark next exercise as active
                         }
                         return exercise;
                     })
@@ -81,8 +85,13 @@ export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
 
                 return {
                     scheduleExerciseList:store.scheduleExerciseList.map((exercise,index)=>{
+                        if (index === currentIndex) {
+                            console.log("next exercise is : "+exercise.exerciseName)
+                            return { ...exercise, exerciseStatus: "Completed" }; // Mark next exercise as active
+                        }
                         if (index === currentIndex + 1) {
-                            return { ...exercise, exerciseStatus: false }; // Mark next exercise as active
+                            console.log("next exercise is : "+exercise.exerciseName)
+                            return { ...exercise, exerciseStatus: "OnGoing" }; // Mark next exercise as active
                         }
                         return exercise;
                     })
@@ -92,7 +101,7 @@ export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
                 return {
                     scheduleExerciseList:store.scheduleExerciseList.map((exercise)=>(
                         exercise.exerciseName===exerciseName?
-                        {...exercise,exerciseStatus:true}:exercise
+                        {...exercise,exerciseStatus:"Pending"}:exercise
                     ))
                 }
 
@@ -102,7 +111,7 @@ export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
     getNoOfCompletedExercise:()=>{
         let completedExercises:number=0
          get().scheduleExerciseList.map((exercise)=>{
-            if(!exercise.exerciseStatus){
+            if(exercise.exerciseStatus=="Completed"){
                 completedExercises=completedExercises+1
             }
          })

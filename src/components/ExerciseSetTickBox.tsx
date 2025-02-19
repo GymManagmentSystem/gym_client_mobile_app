@@ -12,16 +12,16 @@ interface ExerciseSetTickBoxProps {
 const ExerciseSetTickBox = ({exerciseName}: ExerciseSetTickBoxProps) => {
   const theme = useTheme();
   const exerciseDetails=useScheduleExerciseStore();
-  const isDisable=exerciseDetails.getExerciseByName(exerciseName)?.exerciseStatus;
+  const exerciseStatus=exerciseDetails.getExerciseByName(exerciseName)?.exerciseStatus;
   const [showImage, setShowImage] = useState<boolean>(false);
-  const backgroundColor = isDisable
+  const backgroundColor = exerciseStatus==="Pending"
     ? theme.colors.background.quaternary.primary
     : theme.colors.background.other;
 
   return (
     <TouchableOpacity
       style={[style.tickBoxContainer, {backgroundColor}]}
-      disabled={isDisable}
+      disabled={exerciseStatus==="OnGoing"?false:true}
       onPress={() => {
         setShowImage(true)
         exerciseDetails.updateScheduleExercise(exerciseName)
