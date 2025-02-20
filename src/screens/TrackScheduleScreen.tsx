@@ -10,14 +10,13 @@ import {ScheduleExercise} from '../interfaces/currentSchedules';
 import {TrackedExercise} from '../interfaces/TrackedExercise';
 import * as Progress from 'react-native-progress';
 import ThemeText from '../components/ThemeText';
+import ProgressCircle from '../components/ProgressCircle';
 
 const TrackScheduleScreen = () => {
   const queryClient = useQueryClient();
   const userStore = useUserDataStore();
   const theme = useTheme();
   const exerciseDetailStore = useScheduleExerciseStore();
-  let completedExercise = exerciseDetailStore.getNoOfCompletedExercise();
-  const [completedExercises, setCompletedExercises] = useState<number>(1);
   let todaySchedule: ScheduleExercise | null = null;
   const todayNameStr = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
@@ -55,13 +54,6 @@ const TrackScheduleScreen = () => {
     }
   }, [todaySchedule]);
 
-  useEffect(() => {
-    if (!completedExercise) {
-      setCompletedExercises(1);
-    } else {
-      setCompletedExercises(completedExercise);
-    }
-  }, [exerciseDetailStore.scheduleExerciseList]);
 
   return (
     <View
@@ -74,21 +66,25 @@ const TrackScheduleScreen = () => {
           <ThemeText fontType='primary' fontSize='medium' fontStyle='medium'>Today Schedule</ThemeText>
           <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>This is your workout plan and the order for today.</ThemeText>
         </View>
-      <View>
-        <Progress.Bar
-          progress={Math.max(
-            0,
-            Math.min(
-              completedExercises /
-                exerciseDetailStore.scheduleExerciseList.length,
-              1,
-            ),
-          )}
-          color="yellow"
-          style={{width:150}}
-          unfilledColor={theme.colors.background.primary}
-        />
-      </View>
+
+        <View style={style.progressBarContainer}>
+          <View style={style.ProgressBarTitleContainer}>
+            <ThemeText fontType='primary' fontSize='large' fontStyle='medium'>My Progress</ThemeText>
+          </View>
+          <View style={style.progressBarBodyContainer}>
+            <ProgressCircle/>
+            <View style={style.progressBarColorIdentifierContainer}>
+              <View style={style.progressBarColorIdentifier}>
+                <View style={[style.progressBarColorBox,{backgroundColor:theme.colors.background.highlight}]}></View>
+                <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall'>Completed Exercises</ThemeText>
+              </View>
+              <View style={style.progressBarColorIdentifier}>
+                <View style={[style.progressBarColorBox,{backgroundColor:theme.colors.background.quaternary.primary}]}></View>
+                <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall'>Pending Exercises</ThemeText>
+              </View>
+            </View>
+          </View>
+        </View>
 
       {todaySchedule?.exerciseList.map(exercise => (
         <ExerciseTrackingCard
@@ -117,11 +113,32 @@ const style = StyleSheet.create({
     marginTop:20
   },
   progressBarContainer:{
-    marginTop:100
+    marginTop:40
   },
   ProgressBarTitleContainer:{
     display:"flex",
     justifyContent:"center",
     alignItems:"center"
+  },
+  progressBarBodyContainer:{
+    display:"flex",
+    flexDirection:"row",
+    justifyContent:"space-around"
+  },
+  progressBarColorIdentifierContainer:{
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"center",
+    alignItems:"flex-start"
+  },
+  progressBarColorIdentifier:{
+    display:"flex",
+    flexDirection:"row",
+    justifyContent:"flex-start",
+    gap:5,
+  },
+  progressBarColorBox:{
+    width:13,
+    height:13
   }
 });
