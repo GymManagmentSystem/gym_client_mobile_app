@@ -9,7 +9,7 @@ interface ScheduleState{
     getExerciseByName:(exerciseName:string)=>TrackedExercise|null,
     setInitialScheduleExercise:(exercises:TrackedExercise[])=>void,
     updateScheduleExercise:(exerciseName:string,remainingTime?:number)=>void,
-    getNoOfCompletedExercise:()=>number
+    getNoOfCompletedExercise:(status:"Completed"|"Pending")=>number
 }
 
 export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
@@ -108,13 +108,13 @@ export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
             }
         })
     },
-    getNoOfCompletedExercise:()=>{
-        let completedExercises:number=0
+    getNoOfCompletedExercise:(status)=>{
+        let exerciseCount:number=0
          get().scheduleExerciseList.map((exercise)=>{
-            if(exercise.exerciseStatus=="Completed"){
-                completedExercises=completedExercises+1
+            if(exercise.exerciseStatus==status){
+                exerciseCount=exerciseCount+1
             }
          })
-         return completedExercises;
+         return exerciseCount;
     }
 }))
