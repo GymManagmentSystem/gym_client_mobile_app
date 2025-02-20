@@ -27,7 +27,7 @@ const ExerciseTimer = ({exerciseName}: ExerciseTimer) => {
     } else {
       setSelectedExerciseStatus(selectedExercise);
     }
-  }, [selectedExercise]);
+  }, [selectedExercise,exerciseDetailsStore]);
 
   const backgroundColor = selectedExerciseStatus?.exerciseStatus==="Pending"
     ? theme.colors.background.quaternary.secondary

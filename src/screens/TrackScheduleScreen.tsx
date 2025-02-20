@@ -1,6 +1,6 @@
 import {useQueryClient} from '@tanstack/react-query';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import useUserDataStore from '../store/useNameStore';
 import ExerciseTrackingCard from '../components/ExerciseTrackingCard';
 import {getWidthPercentage} from '../utility/Dimensions';
@@ -8,7 +8,6 @@ import {useTheme} from '../context/ThemeContext';
 import {useScheduleExerciseStore} from '../store/useTodayScheduleStore';
 import {ScheduleExercise} from '../interfaces/currentSchedules';
 import {TrackedExercise} from '../interfaces/TrackedExercise';
-import * as Progress from 'react-native-progress';
 import ThemeText from '../components/ThemeText';
 import ProgressCircle from '../components/ProgressCircle';
 
@@ -44,7 +43,7 @@ const TrackScheduleScreen = () => {
           exerciseName: exercise.exerciseName,
           totalSets: exercise.sets,
           duration: exercise.duration * 60,
-          exerciseStatus: "Pending",
+          exerciseStatus: 'Pending',
           completedSets: 0,
           totalDuration: exercise.duration * 60,
         }),
@@ -54,47 +53,71 @@ const TrackScheduleScreen = () => {
     }
   }, [todaySchedule]);
 
-
   return (
     <View
       style={[
         style.mainContainer,
         {backgroundColor: theme.colors.background.primary},
       ]}>
+      <View style={style.topTextContainer}>
+        <ThemeText fontType="primary" fontSize="medium" fontStyle="medium">
+          Today Schedule
+        </ThemeText>
+        <ThemeText fontType="primary" fontSize="xsmall" fontStyle="regular">
+          This is your workout plan and the order for today.
+        </ThemeText>
+      </View>
 
-        <View style={style.topTextContainer}>
-          <ThemeText fontType='primary' fontSize='medium' fontStyle='medium'>Today Schedule</ThemeText>
-          <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>This is your workout plan and the order for today.</ThemeText>
+      <View style={style.progressBarContainer}>
+        <View style={style.ProgressBarTitleContainer}>
+          <ThemeText fontType="primary" fontSize="large" fontStyle="medium">
+            My Progress
+          </ThemeText>
         </View>
-
-        <View style={style.progressBarContainer}>
-          <View style={style.ProgressBarTitleContainer}>
-            <ThemeText fontType='primary' fontSize='large' fontStyle='medium'>My Progress</ThemeText>
-          </View>
-          <View style={style.progressBarBodyContainer}>
-            <ProgressCircle/>
-            <View style={style.progressBarColorIdentifierContainer}>
-              <View style={style.progressBarColorIdentifier}>
-                <View style={[style.progressBarColorBox,{backgroundColor:theme.colors.background.highlight}]}></View>
-                <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall'>Completed Exercises</ThemeText>
-              </View>
-              <View style={style.progressBarColorIdentifier}>
-                <View style={[style.progressBarColorBox,{backgroundColor:theme.colors.background.quaternary.primary}]}></View>
-                <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall'>Pending Exercises</ThemeText>
-              </View>
+        <View style={style.progressBarBodyContainer}>
+          <ProgressCircle />
+          <View style={style.progressBarColorIdentifierContainer}>
+            <View style={style.progressBarColorIdentifier}>
+              <View
+                style={[
+                  style.progressBarColorBox,
+                  {backgroundColor: theme.colors.background.highlight},
+                ]}></View>
+              <ThemeText
+                fontType="primary"
+                fontStyle="regular"
+                fontSize="xsmall">
+                Completed Exercises
+              </ThemeText>
+            </View>
+            <View style={style.progressBarColorIdentifier}>
+              <View
+                style={[
+                  style.progressBarColorBox,
+                  {backgroundColor: theme.colors.background.quaternary.primary},
+                ]}></View>
+              <ThemeText
+                fontType="primary"
+                fontStyle="regular"
+                fontSize="xsmall">
+                Pending Exercises
+              </ThemeText>
             </View>
           </View>
         </View>
+      </View>
 
-      {todaySchedule?.exerciseList.map(exercise => (
-        <ExerciseTrackingCard
-          key={exercise.exerciseName}
-          exerciseName={exercise.exerciseName}
-          sets={exercise.sets}
-          reps={exercise.reps}
-          exerciseUrl={exercise.exerciseUrl}
-        />
-      ))}
+      <ScrollView style={style.exerciseContainer}>
+        {todaySchedule?.exerciseList.map(exercise => (
+          <ExerciseTrackingCard
+            key={exercise.exerciseName}
+            exerciseName={exercise.exerciseName}
+            sets={exercise.sets}
+            reps={exercise.reps}
+            exerciseUrl={exercise.exerciseUrl}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 };
@@ -107,38 +130,42 @@ const style = StyleSheet.create({
     paddingLeft: getWidthPercentage(16),
     paddingRight: getWidthPercentage(16),
   },
-  topTextContainer:{
-    justifyContent:"flex-start",
-    gap:10,
-    marginTop:20
+  topTextContainer: {
+    justifyContent: 'flex-start',
+    gap: 10,
+    marginTop: 20,
   },
-  progressBarContainer:{
-    marginTop:40
+  progressBarContainer: {
+    marginTop: 40,
   },
-  ProgressBarTitleContainer:{
-    display:"flex",
-    justifyContent:"center",
-    alignItems:"center"
+  ProgressBarTitleContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  progressBarBodyContainer:{
-    display:"flex",
-    flexDirection:"row",
-    justifyContent:"space-around"
+  progressBarBodyContainer: {
+    marginTop: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
-  progressBarColorIdentifierContainer:{
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"center",
-    alignItems:"flex-start"
+  progressBarColorIdentifierContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
-  progressBarColorIdentifier:{
-    display:"flex",
-    flexDirection:"row",
-    justifyContent:"flex-start",
-    gap:5,
+  progressBarColorIdentifier: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    gap: 5,
   },
-  progressBarColorBox:{
-    width:13,
-    height:13
+  progressBarColorBox: {
+    width: 13,
+    height: 13,
+  },
+  exerciseContainer:{
+    marginTop:10
   }
 });
