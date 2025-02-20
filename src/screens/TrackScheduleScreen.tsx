@@ -9,6 +9,7 @@ import {useScheduleExerciseStore} from '../store/useTodayScheduleStore';
 import {ScheduleExercise} from '../interfaces/currentSchedules';
 import {TrackedExercise} from '../interfaces/TrackedExercise';
 import * as Progress from 'react-native-progress';
+import ThemeText from '../components/ThemeText';
 
 const TrackScheduleScreen = () => {
   const queryClient = useQueryClient();
@@ -68,6 +69,11 @@ const TrackScheduleScreen = () => {
         style.mainContainer,
         {backgroundColor: theme.colors.background.primary},
       ]}>
+
+        <View style={style.topTextContainer}>
+          <ThemeText fontType='primary' fontSize='medium' fontStyle='medium'>Today Schedule</ThemeText>
+          <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>This is your workout plan and the order for today.</ThemeText>
+        </View>
       <View>
         <Progress.Bar
           progress={Math.max(
@@ -105,4 +111,17 @@ const style = StyleSheet.create({
     paddingLeft: getWidthPercentage(16),
     paddingRight: getWidthPercentage(16),
   },
+  topTextContainer:{
+    justifyContent:"flex-start",
+    gap:10,
+    marginTop:20
+  },
+  progressBarContainer:{
+    marginTop:100
+  },
+  ProgressBarTitleContainer:{
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center"
+  }
 });
