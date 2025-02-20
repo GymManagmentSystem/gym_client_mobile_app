@@ -13,8 +13,8 @@ import PrimaryButton from '../components/PrimaryButton';
 import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
 import useLogin from '../hooks/useLogin';
 import CustomModal from '../modals/CustomModal';
-import LoadingActivityIndicator from '../modals/LoadingActivityIndicator';
 import useUserDataStore from '../store/useNameStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   MainStackNavigationList,
@@ -70,15 +70,14 @@ const LoginScreen = () => {
         const parts = data.successMessage.split(',');
         const memberType = parts[0].split(': ')[1];
         const memberId = parts[1].split(': ')[1];
-
         console.log(memberId, memberType);
-
         if (memberType === 'New Member') {
           setModalMessage('Reset your password at first Login');
           setPasswordResetSuccessModalVisibility(true);
         } else {
           userDataStore.setUserName(userCredentials.userName);
           userDataStore.setLoggedMemberId(Number.parseInt(memberId))
+          saveLastLoginDate();
           setModalMessage('Login Succesfull');
           setSuccessModalVisibility(true);
         }
@@ -89,6 +88,18 @@ const LoginScreen = () => {
       },
     });
   };
+
+  const saveLastLoginDate=async ()=>{
+    const lastLoginDate = await AsyncStorage.getItem('lastLoginDate');
+    const today=new Date().toLocaleDateString('en-CA');
+    if(lastLoginDate===null){
+      await AsyncStorage.setItem("lastLoginDate",today)
+    }else if(lastLoginDate!=today){
+      await AsyncStorage.setItem("lastLoginDate",today)
+      console.log("new day has begin")
+    }
+    console.log(lastLoginDate)  
+  }
 
   const passwordResetSuccessNavigate = () => {
     navigation.navigate('ChangePasswordScreen', {userName});
