@@ -19,12 +19,12 @@ import CustomModal from '../modals/CustomModal';
 import LoadingActivityIndicator from '../modals/LoadingActivityIndicator';
 import {useQueryClient} from '@tanstack/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {LocalStoredExercise} from '../interfaces/LocalStoredExercise';
 
 const HomeScreen = () => {
   const theme = useTheme();
   const userDataStore = useUserDataStore();
-  const [todayScheduleType, settodayScheduleType] =
-  useState<string>();
+  const [todayScheduleType, settodayScheduleType] = useState<string>();
   const {
     data: currentScheduleList,
     error,
@@ -49,26 +49,40 @@ const HomeScreen = () => {
 
   const queryClinet = useQueryClient();
 
-  const storeTodaySchedule=async()=>{
-    const todaySchedule =currentScheduleList?.find(
+  useEffect(() => {
+    storeTodaySchedule();
+  }, [currentScheduleList]);
+
+  const storeTodaySchedule = async () => {
+    try {
+      const todaySchedule = currentScheduleList?.find(
         todaySchedule =>
           todaySchedule.schedule.scheduleDay1 === todayNameStr ||
           todaySchedule.schedule.scheduleDay2 === todayNameStr,
-      )
-    const lastLoginDate=await AsyncStorage.getItem("lastLoginDate") 
-    const today=new Date().toLocaleDateString('en-CA');
-    if(lastLoginDate != today ){
-      if(!todaySchedule){
-        await AsyncStorage.setItem("todaySchedule","No schedule Found")
-      }else{
-        await AsyncStorage.setItem("todaySchedule",JSON.stringify(todaySchedule))
+      );
+      const lastLoginDate = await AsyncStorage.getItem('lastLoginDate');
+      const today = new Date().toLocaleDateString('en-CA');
+      if (!todaySchedule) {
+        await AsyncStorage.setItem('todaySchedule', JSON.stringify([]));
+      } else {
+        setSelectedScheduleType(todaySchedule.schedule?.scheduleType);
+        settodayScheduleType(todaySchedule.schedule?.scheduleType);
+        if (lastLoginDate != today) {
+          const initialExerciseSchedule: LocalStoredExercise[] =
+            todaySchedule.exerciseList.map(exercise => ({
+              ...exercise,
+              exerciseStatus: 'Pending',
+            }));
+          await AsyncStorage.setItem(
+            'todaySchedule',
+            JSON.stringify(initialExerciseSchedule),
+          );
+        }
       }
-     
+    } catch (e) {
+      setShowErrorModal(true);
     }
-
-  }  
-
-
+  };
 
   return (
     <SafeAreaView
@@ -117,7 +131,7 @@ const HomeScreen = () => {
               fontSize="medium"
               fontStyle="regular"
               fontColor="other">
-              Today  is  your
+              Today is your
             </ThemeText>
             <ThemeText
               fontType="secondary"
@@ -133,28 +147,27 @@ const HomeScreen = () => {
               fontSize="xsmall"
               fontStyle="regular"
               fontColor="primary">
-              Stay  focused,  lift
+              Stay focused, lift
             </ThemeText>
             <ThemeText
               fontType="secondary"
               fontSize="xsmall"
               fontStyle="regular"
               fontColor="primary"
-              style={{marginTop:5}}>
-              strong, and  make
+              style={{marginTop: 5}}>
+              strong, and make
             </ThemeText>
             <ThemeText
               fontType="secondary"
               fontSize="xsmall"
               fontStyle="regular"
               fontColor="primary"
-              style={{marginTop:5}}>
+              style={{marginTop: 5}}>
               every rep count!
             </ThemeText>
           </View>
         </View>
         <ImageBackground
-          
           style={style.homeImageConatiner}
           source={require('../../assets/images/homeBackgroundImage.png')}></ImageBackground>
       </View>
@@ -222,7 +235,7 @@ const style = StyleSheet.create({
     marginTop: getHeightPercentage(20),
   },
   homeContainer: {
-    marginTop:getHeightPercentage(20),
+    marginTop: getHeightPercentage(20),
     width: getWidthPercentage(370),
     height: getHeightPercentage(205),
     borderRadius: 20,
