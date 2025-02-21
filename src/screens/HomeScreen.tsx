@@ -18,10 +18,13 @@ import useGetCurrentSchedules from '../hooks/useGetCurrentSchedules';
 import CustomModal from '../modals/CustomModal';
 import LoadingActivityIndicator from '../modals/LoadingActivityIndicator';
 import {useQueryClient} from '@tanstack/react-query';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = () => {
   const theme = useTheme();
   const userDataStore = useUserDataStore();
+  const [todayScheduleType, settodayScheduleType] =
+  useState<string>();
   const {
     data: currentScheduleList,
     error,
@@ -46,16 +49,26 @@ const HomeScreen = () => {
 
   const queryClinet = useQueryClient();
 
-  const todayScheduleTypeStr = currentScheduleList
-    ? currentScheduleList.find(
+  const storeTodaySchedule=async()=>{
+    const todaySchedule =currentScheduleList?.find(
         todaySchedule =>
           todaySchedule.schedule.scheduleDay1 === todayNameStr ||
           todaySchedule.schedule.scheduleDay2 === todayNameStr,
-      )?.schedule.scheduleType || 'Rest'
-    : 'Rest';
+      )
+    const lastLoginDate=await AsyncStorage.getItem("lastLoginDate") 
+    const today=new Date().toLocaleDateString('en-CA');
+    if(lastLoginDate != today ){
+      if(!todaySchedule){
+        await AsyncStorage.setItem("todaySchedule","No schedule Found")
+      }else{
+        await AsyncStorage.setItem("todaySchedule",JSON.stringify(todaySchedule))
+      }
+     
+    }
 
-  const [todayScheduleType, settodayScheduleType] =
-    useState<string>(todayScheduleTypeStr);
+  }  
+
+
 
   return (
     <SafeAreaView
