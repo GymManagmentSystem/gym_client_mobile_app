@@ -3,55 +3,64 @@ import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import useUserDataStore from '../store/useNameStore';
 import ExerciseTrackingCard from '../components/ExerciseTrackingCard';
-import {getWidthPercentage} from '../utility/Dimensions';
+import {getHeightPercentage, getWidthPercentage} from '../utility/Dimensions';
 import {useTheme} from '../context/ThemeContext';
 import {useScheduleExerciseStore} from '../store/useTodayScheduleStore';
 import {ScheduleExercise} from '../interfaces/currentSchedules';
 import {TrackedExercise} from '../interfaces/TrackedExercise';
 import ThemeText from '../components/ThemeText';
 import ProgressCircle from '../components/ProgressCircle';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LocalStoredExercise } from '../interfaces/LocalStoredExercise';
 
 const TrackScheduleScreen = () => {
-  const queryClient = useQueryClient();
-  const userStore = useUserDataStore();
   const theme = useTheme();
   const exerciseDetailStore = useScheduleExerciseStore();
-  let todaySchedule: ScheduleExercise | null = null;
-  const todayNameStr = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-  });
-  const currentSchedules = queryClient.getQueryData<ScheduleExercise[]>([
-    'currentScheduleList',
-    userStore.loggedMmeberId,
-  ]);
+  const [todaySchedule,setTodaySchedule]=useState<LocalStoredExercise[]>([])
+  const [scheduleAvailability,setScheduleAvailbility]=useState<boolean>(false);
 
-  if (!currentSchedules) {
-    console.log('error');
-  } else {
-    todaySchedule =
-      currentSchedules.find(
-        schedule =>
-          schedule.schedule.scheduleDay1 === todayNameStr ||
-          schedule.schedule.scheduleDay2 === todayNameStr,
-      ) || null;
+  useEffect(()=>{
+    getTodayScheduleFromStore()
+    loadSchedule();
+  },[])
+
+
+  const getTodayScheduleFromStore=async():Promise<LocalStoredExercise[]|string>=>{
+    try{
+      const todayScheduleStr:string|null=await AsyncStorage.getItem('todaySchedule')
+      console.log("today schedule is "+todayScheduleStr)
+      if(!todayScheduleStr){
+         return []
+      }
+      return JSON.parse(todayScheduleStr)  
+    }catch(e){
+      return []
+    }
   }
 
-  useEffect(() => {
-    if (todaySchedule) {
-      const exerciseList: TrackedExercise[] = todaySchedule.exerciseList.map(
-        exercise => ({
-          exerciseName: exercise.exerciseName,
-          totalSets: exercise.sets,
-          duration: exercise.duration * 60,
-          exerciseStatus: 'Pending',
-          completedSets: 0,
-          totalDuration: exercise.duration * 60,
-        }),
-      );
-
-      exerciseDetailStore.setInitialScheduleExercise(exerciseList);
+  const loadSchedule=async()=>{
+    let schedule=await getTodayScheduleFromStore()
+    if(!Array.isArray(schedule) || schedule.length === 0){
+      setTodaySchedule([]);
+      setScheduleAvailbility(false);
+      return
     }
-  }, [todaySchedule]);
+    setTodaySchedule(schedule as LocalStoredExercise[])
+    setScheduleAvailbility(true);
+    console.log("Today schedule is ",schedule)
+    const exerciseList: TrackedExercise[] = schedule.map(
+      exercise => ({
+        exerciseName: exercise.exerciseName,
+        totalSets: exercise.sets,
+        duration: exercise.duration * 60,
+        exerciseStatus: 'Pending',
+        completedSets: exercise.completedSets,
+        totalDuration: exercise.duration * 60,
+      }),
+    );
+    exerciseDetailStore.setInitialScheduleExercise(exerciseList);
+  }
+  
 
   return (
     <View
@@ -63,12 +72,19 @@ const TrackScheduleScreen = () => {
         <ThemeText fontType="primary" fontSize="medium" fontStyle="medium">
           Today Schedule
         </ThemeText>
-        <ThemeText fontType="primary" fontSize="xsmall" fontStyle="regular">
+        {scheduleAvailability ?(
+          <ThemeText fontType="primary" fontSize="xsmall" fontStyle="regular">
           This is your workout plan and the order for today.
         </ThemeText>
+        ):(
+          <ThemeText fontType="primary" fontSize="xsmall" fontStyle="regular">
+          No workout scheduled
+        </ThemeText>
+        )}
       </View>
 
-      <View style={style.progressBarContainer}>
+      {scheduleAvailability?(
+        <View style={style.progressBarContainer}>
         <View style={style.ProgressBarTitleContainer}>
           <ThemeText fontType="primary" fontSize="large" fontStyle="medium">
             My Progress
@@ -106,9 +122,17 @@ const TrackScheduleScreen = () => {
           </View>
         </View>
       </View>
+      ):(
+        <View style={[style.noScheduleContainer,{backgroundColor:theme.colors.background.secondary}]}>
+          <ThemeText fontColor='other' fontSize='small' fontStyle='regular' fontType='primary'>Today is your Rest Day!</ThemeText>
+          <ThemeText fontSize='small' fontStyle='regular' fontType='primary'>Take this time to recover, recharge, and</ThemeText>
+          <ThemeText fontSize='small' fontStyle='regular' fontType='primary'>come back stronger!</ThemeText>
+        </View>
+      )}
+      
 
       <ScrollView style={style.exerciseContainer}>
-        {todaySchedule?.exerciseList.map(exercise => (
+        {Array.isArray(todaySchedule) && todaySchedule.length > 0  && todaySchedule.map(exercise => (
           <ExerciseTrackingCard
             key={exercise.exerciseName}
             exerciseName={exercise.exerciseName}
@@ -167,5 +191,14 @@ const style = StyleSheet.create({
   },
   exerciseContainer:{
     marginTop:10
+  },
+  noScheduleContainer:{
+    marginTop:getHeightPercentage(60),
+    width:getWidthPercentage(362),
+    height:getHeightPercentage(170),
+    borderRadius:20,
+    justifyContent:"center",
+    alignItems:"center",
+    gap:10
   }
 });

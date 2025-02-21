@@ -4,5 +4,7 @@ export interface LocalStoredExercise{
     duration:number,
     sets:number
     exerciseUrl:string
+    completedSets:number,
+    totalDuration:number
     reps:string
 }

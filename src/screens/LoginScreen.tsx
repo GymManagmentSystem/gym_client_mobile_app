@@ -91,15 +91,17 @@ const LoginScreen = () => {
 
   const saveLastLoginDate=async ()=>{
     try{
-      const lastLoginDate = await AsyncStorage.getItem('lastLoginDate');
+    const lastLoginDate = await AsyncStorage.getItem('lastLoginDate');
     const today=new Date().toLocaleDateString('en-CA');
     if(lastLoginDate===null){
-      await AsyncStorage.setItem("lastLoginDate",today)
-    }else if(lastLoginDate!=today){
+      await AsyncStorage.setItem("lastLoginDate",'1995-12-11')
+    }else{
+      await AsyncStorage.removeItem("lastLoginDate")
       await AsyncStorage.setItem("lastLoginDate",today)
       console.log("new day has begin")
     }
-    console.log(lastLoginDate) 
+    
+   console.log(lastLoginDate)
     }catch(e){
       setModalMessage("Some thing went wrong")
       setErrorModalVisibility(true);

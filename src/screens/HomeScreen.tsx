@@ -50,8 +50,11 @@ const HomeScreen = () => {
   const queryClinet = useQueryClient();
 
   useEffect(() => {
-    storeTodaySchedule();
-  }, [currentScheduleList]);
+    if(currentScheduleList && !isLoading){
+      storeTodaySchedule();
+    }
+   
+  }, [currentScheduleList,isLoading]);
 
   const storeTodaySchedule = async () => {
     try {
@@ -60,24 +63,38 @@ const HomeScreen = () => {
           todaySchedule.schedule.scheduleDay1 === todayNameStr ||
           todaySchedule.schedule.scheduleDay2 === todayNameStr,
       );
+
+      console.log(JSON.stringify(todaySchedule))
       const lastLoginDate = await AsyncStorage.getItem('lastLoginDate');
       const today = new Date().toLocaleDateString('en-CA');
       if (!todaySchedule) {
-        await AsyncStorage.setItem('todaySchedule', JSON.stringify([]));
+        console.log("the today schedule is ",todaySchedule)
+        await AsyncStorage.removeItem('todaySchedule')
+        await AsyncStorage.setItem('todaySchedule', "404");
+        settodayScheduleType("Rest");
       } else {
         setSelectedScheduleType(todaySchedule.schedule?.scheduleType);
         settodayScheduleType(todaySchedule.schedule?.scheduleType);
+        console.log("last login date",lastLoginDate)
+        console.log("today is",today);
         if (lastLoginDate != today) {
+          console.log("last login date",lastLoginDate)
+          console.log("today is",today);
+          console.log("need  storing new schedule for today")
           const initialExerciseSchedule: LocalStoredExercise[] =
             todaySchedule.exerciseList.map(exercise => ({
               ...exercise,
               exerciseStatus: 'Pending',
+              completedSets:0,
+              totalDuration:exercise.duration
             }));
+          await AsyncStorage.removeItem('todaySchedule')
           await AsyncStorage.setItem(
             'todaySchedule',
             JSON.stringify(initialExerciseSchedule),
           );
         }
+        console.log("no need for storing new schedule for today")
       }
     } catch (e) {
       setShowErrorModal(true);
