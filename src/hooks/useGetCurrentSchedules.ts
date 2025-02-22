@@ -18,7 +18,7 @@ const useGetCurrentSchedules=(memberId:number)=>{
     const getCurrentSchedule=async()=>{
         try{
         const {data}=await axiosInstance.get<SuccessResponse>(`/schedules/current/${memberId}`)
-        console.log(data.dataList)
+        //console.log(data.dataList)
         return data.dataList;
         }catch(e){
             console.log(e)

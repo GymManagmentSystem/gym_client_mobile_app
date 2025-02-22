@@ -63,27 +63,22 @@ const HomeScreen = () => {
           todaySchedule.schedule.scheduleDay2 === todayNameStr,
       );
 
-      console.log(JSON.stringify(todaySchedule));
-
       if (!todaySchedule) {
-        console.log('the today schedule is ', todaySchedule);
-        await AsyncStorage.removeItem('todaySchedule');
         await AsyncStorage.setItem('todaySchedule', '404');
         settodayScheduleType('Rest');
       } else {
         setSelectedScheduleType(todaySchedule.schedule?.scheduleType);
         settodayScheduleType(todaySchedule.schedule?.scheduleType);
-
         if (userDataStore.isFirstUserLogin) {
-          console.log('need  storing new schedule for today');
+          console.log("stored schedule for today :",JSON.stringify(todaySchedule.exerciseList));
           const initialExerciseSchedule: LocalStoredExercise[] =
             todaySchedule.exerciseList.map((exercise, index) => ({
               ...exercise,
-              exerciseStatus: index == 0 ? 'OnGoing' : 'Pending',
+              exerciseStatus: index === 0 ? 'OnGoing' : 'Pending',
               completedSets: 0,
               totalDuration: exercise.duration,
             }));
-          await AsyncStorage.removeItem('todaySchedule');
+          console.log("list stored in async"+initialExerciseSchedule)  
           await AsyncStorage.setItem(
             'todaySchedule',
             JSON.stringify(initialExerciseSchedule),

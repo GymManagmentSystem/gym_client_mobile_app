@@ -18,6 +18,9 @@ const ExerciseSetTickBox = ({exerciseName}: ExerciseSetTickBoxProps) => {
     ? theme.colors.background.quaternary.primary
     : theme.colors.background.other;
 
+  
+    console.log("exercise in exerciseSetTickBox ",exerciseName)   
+
   return (
     <TouchableOpacity
       style={[style.tickBoxContainer, {backgroundColor}]}
