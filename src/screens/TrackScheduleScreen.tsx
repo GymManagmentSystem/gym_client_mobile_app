@@ -21,7 +21,6 @@ const TrackScheduleScreen = () => {
     useState<boolean>(false);
 
   useEffect(() => {
-    getTodayScheduleFromStore();
     loadSchedule();
   }, []);
 
@@ -29,22 +28,25 @@ const TrackScheduleScreen = () => {
     LocalStoredExercise[] | string
   > => {
     try {
+      console.log("get Schedule from store function start")
       const todayScheduleStr: string | null = await AsyncStorage.getItem(
         'todaySchedule',
       );
-      console.log('today schedule is ' + todayScheduleStr);
+      console.log('today exercise schedule from async is ' + todayScheduleStr);
       if (!todayScheduleStr) {
         return [];
       }
-      return JSON.parse(todayScheduleStr);
+      return todaySchedule?JSON.parse(todayScheduleStr):[];
     } catch (e) {
       return [];
     }
   };
 
   const loadSchedule = async () => {
+    console.log("load schedule function start")
     let schedule = await getTodayScheduleFromStore();
     if (!Array.isArray(schedule) || schedule.length === 0) {
+      console.log("schedule is unavailable")
       setTodaySchedule([]);
       setScheduleAvailbility(false);
       return;
@@ -56,7 +58,7 @@ const TrackScheduleScreen = () => {
       exerciseName: exercise.exerciseName,
       totalSets: exercise.sets,
       duration: exercise.duration * 60,
-      exerciseStatus: 'Pending',
+      exerciseStatus: exercise.exerciseStatus,
       completedSets: exercise.completedSets,
       totalDuration: exercise.duration * 60,
     }));

@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { TrackedExercise } from "../interfaces/TrackedExercise";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LocalStoredExercise } from "../interfaces/LocalStoredExercise";
 
 
 
@@ -25,8 +27,8 @@ export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
                     totalSets:exercise.totalSets??0,
                     duration:exercise.duration??0,
                     totalDuration:exercise.duration??0,
-                    completedSets:0,
-                    exerciseStatus:index==0?"OnGoing":"Pending"
+                    completedSets:exercise.completedSets??0,
+                    exerciseStatus:exercise.exerciseStatus
                 }))
                 console.log("initializes list is : ",JSON.stringify(initializedExerciseList));
                 return{scheduleExerciseList:initializedExerciseList}
@@ -34,7 +36,7 @@ export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
             return {scheduleExerciseList:[]}
         })
     },
-    updateScheduleExercise:(exerciseName,remainingTime)=>{
+    updateScheduleExercise:async(exerciseName,remainingTime)=>{
         set((store)=>{
             const selectedExercise=store.scheduleExerciseList.find((exercise)=>exercise.exerciseName===exerciseName)
 
@@ -107,6 +109,29 @@ export const useScheduleExerciseStore=create<ScheduleState>((set,get)=>({
 
             }
         })
+
+        try{
+            const storedScheduleStr=await AsyncStorage.getItem('todaySchedule');
+            const storedSchedule:LocalStoredExercise[]=storedScheduleStr?JSON.parse(storedScheduleStr):[]
+
+            const updateSchedule:TrackedExercise[]=get().scheduleExerciseList
+
+            const mergedSchedule:LocalStoredExercise[]=storedSchedule.map(storedExercise=>{
+              const updateExercise=updateSchedule.find((updateExercise)=>updateExercise.exerciseName===storedExercise.exerciseName)
+              return updateExercise?{
+                ...storedExercise,
+                exerciseStatus:updateExercise.exerciseStatus,
+                sets:updateExercise.totalSets,
+                duration:updateExercise.duration/60,
+                completedSets:updateExercise.completedSets  
+              }:storedExercise
+
+            })
+            await AsyncStorage.setItem('todaySchedule', JSON.stringify(mergedSchedule));
+            console.log('Schedule successfully updated!');
+        }catch(error){
+            console.log("error is happend"+error);
+        }
     },
     getNoOfCompletedExercise:(status)=>{
         let exerciseCount:number=0

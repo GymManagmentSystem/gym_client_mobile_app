@@ -26,11 +26,13 @@ const ExerciseTrackingCard = ({
   const exerciseStatus =
     exerciseDetails.getExerciseByName(exerciseName)?.exerciseStatus;
 
-  const backgroundColor = exerciseStatus =="Pending"
+  console.log("in the exercise tracking card ",exerciseName + " " + exerciseStatus+ "sets "+ sets); 
+
+  const backgroundColor = exerciseStatus ==="Pending"
     ? theme.colors.background.other
     : theme.colors.background.highlight;
-  const opacity = exerciseStatus=='OnGoing' ? 1 : 0.8;
-  const setsRepsBackgroundColor = exerciseStatus=='Pending'
+  const opacity = exerciseStatus==='OnGoing' ? 1 : 0.8;
+  const setsRepsBackgroundColor = exerciseStatus==='Pending'
     ? theme.colors.background.quaternary.primary
     : theme.colors.background.primary;
 

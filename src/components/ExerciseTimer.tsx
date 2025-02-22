@@ -20,8 +20,9 @@ const ExerciseTimer = ({exerciseName}: ExerciseTimer) => {
   const [selectedExerciseStatus, setSelectedExerciseStatus] =
     useState<TrackedExercise | null>();
 
+  console.log("exercise in exerciseTimer ",exerciseName)  
+
   useEffect(() => {
-    console.log('can i pass before initializing exercise in state');
     if (!selectedExercise) {
       setSelectedExerciseStatus(null);
     } else {
@@ -42,7 +43,6 @@ const ExerciseTimer = ({exerciseName}: ExerciseTimer) => {
       selectedExerciseStatus?.duration &&
       selectedExerciseStatus.duration > 0
     ) {
-      console.log('inside time minus function');
       timeRef.current = setInterval(
         () =>
           setSelectedExerciseStatus(prevState => {
@@ -52,7 +52,7 @@ const ExerciseTimer = ({exerciseName}: ExerciseTimer) => {
               if (prevState.duration > 0) {
                 return {...prevState, duration: prevState.duration - 1};
               } else {
-                console.log("i'm catching in first condition dear");
+               // console.log("i'm catching in first condition dear");
                 setRunning(false);
                 exerciseDetailsStore.updateScheduleExercise(
                   exerciseName,
@@ -65,7 +65,7 @@ const ExerciseTimer = ({exerciseName}: ExerciseTimer) => {
         1000,
       );
     } else if (selectedExerciseStatus?.duration == 0) {
-      console.log("i'm catching in second condition dear");
+      //console.log("i'm catching in second condition dear");
       setRunning(false);
       exerciseDetailsStore.updateScheduleExercise(
         exerciseName,

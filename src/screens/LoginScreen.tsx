@@ -91,9 +91,13 @@ const LoginScreen = () => {
 
   const saveLastLoginDate = async () => {
     try {
+      // await AsyncStorage.removeItem('lastLoginDate');
       const lastLoginDate = await AsyncStorage.getItem('lastLoginDate');
       const today = new Date().toLocaleDateString('en-CA');
+      
+
       if (lastLoginDate === null) {
+        console.log("Last login date is null")
         await AsyncStorage.setItem('lastLoginDate', today);
         userDataStore.setFirstUserLogin(true);
       } else if (lastLoginDate !== today) {
