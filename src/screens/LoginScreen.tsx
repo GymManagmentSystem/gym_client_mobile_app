@@ -13,7 +13,7 @@ import PrimaryButton from '../components/PrimaryButton';
 import {ScreenContainerStyles} from '../styles/ScreenContainerStyles';
 import useLogin from '../hooks/useLogin';
 import CustomModal from '../modals/CustomModal';
-import useUserDataStore from '../store/useNameStore';
+import useUserDataStore from '../store/userDetailStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
@@ -76,7 +76,7 @@ const LoginScreen = () => {
           setPasswordResetSuccessModalVisibility(true);
         } else {
           userDataStore.setUserName(userCredentials.userName);
-          userDataStore.setLoggedMemberId(Number.parseInt(memberId))
+          userDataStore.setLoggedMemberId(Number.parseInt(memberId));
           saveLastLoginDate();
           setModalMessage('Login Succesfull');
           setSuccessModalVisibility(true);
@@ -89,25 +89,27 @@ const LoginScreen = () => {
     });
   };
 
-  const saveLastLoginDate=async ()=>{
-    try{
-    const lastLoginDate = await AsyncStorage.getItem('lastLoginDate');
-    const today=new Date().toLocaleDateString('en-CA');
-    if(lastLoginDate===null){
-      await AsyncStorage.setItem("lastLoginDate",'1995-12-11')
-    }else{
-      await AsyncStorage.removeItem("lastLoginDate")
-      await AsyncStorage.setItem("lastLoginDate",today)
-      console.log("new day has begin")
-    }
-    
-   console.log(lastLoginDate)
-    }catch(e){
-      setModalMessage("Some thing went wrong")
+  const saveLastLoginDate = async () => {
+    try {
+      const lastLoginDate = await AsyncStorage.getItem('lastLoginDate');
+      const today = new Date().toLocaleDateString('en-CA');
+      if (lastLoginDate === null) {
+        await AsyncStorage.setItem('lastLoginDate', today);
+        userDataStore.setFirstUserLogin(true);
+      } else if (lastLoginDate !== today) {
+        await AsyncStorage.setItem('lastLoginDate', today);
+        userDataStore.setFirstUserLogin(true);
+        console.log('new day has begin');
+      }else{
+        userDataStore.setFirstUserLogin(false);
+        console.log("last login  date is ",lastLoginDate);
+      }
+     
+    } catch (e) {
+      setModalMessage('Some thing went wrong');
       setErrorModalVisibility(true);
     }
-    
-  }
+  };
 
   const passwordResetSuccessNavigate = () => {
     navigation.navigate('ChangePasswordScreen', {userName});
