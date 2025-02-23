@@ -6,11 +6,14 @@ import ProgressCircle from '../components/ProgressCircle'
 import { getHeightPercentage, getWidthPercentage } from '../utility/Dimensions'
 import ThemeText from '../components/ThemeText'
 import PaymentHistoryCard from '../components/PaymentHistoryCard'
-
+import useUserDataStore from '../store/userDetailStore'
+import useGetPayments from '../hooks/useGetPayments'
 
 
 const PaymentHistoryScreen = () => {
   const theme=useTheme()
+  const {loggedMmeberId}=useUserDataStore();
+      const{data:paymentList,isLoading,error}=useGetPayments(loggedMmeberId)
   return (
     <View style={[style.mainContainer,{backgroundColor:theme.colors.background.primary}]}>
       <View style={style.headingTextContainer}>
