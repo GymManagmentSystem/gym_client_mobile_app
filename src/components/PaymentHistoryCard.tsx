@@ -5,11 +5,14 @@ import { useTheme } from '../context/ThemeContext'
 import ThemeText from './ThemeText'
 
 
-const PaymentHistoryCard = () => {
 
-    
-    const theme=useTheme()
+interface PaymentHistoryCardProp{
+    payment:Payments
+}
 
+const PaymentHistoryCard = ({payment}:PaymentHistoryCardProp) => {
+
+const theme=useTheme()
 
   return (
     <View style={[style.mainContainer,{backgroundColor:theme.colors.background.secondary}]}>
@@ -18,7 +21,7 @@ const PaymentHistoryCard = () => {
                 <ThemeText fontType='primary' fontStyle='medium' fontSize='xsmall'>Package Type</ThemeText>
             </View>
             <View style={style.value}>
-            <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall' fontColor='other'>membership</ThemeText>
+            <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall' fontColor='other'>{payment.packageType}</ThemeText>
             </View>
         </View>
 
@@ -27,7 +30,7 @@ const PaymentHistoryCard = () => {
                 <ThemeText fontType='primary' fontStyle='medium' fontSize='xsmall'>Payment Time</ThemeText>
             </View>
             <View style={style.value}>
-            <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall' fontColor='other'>17:03:43</ThemeText>
+            <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall' fontColor='other'>{payment.paymentTime}</ThemeText>
             </View>
         </View>
 
@@ -36,7 +39,7 @@ const PaymentHistoryCard = () => {
                 <ThemeText fontType='primary' fontStyle='medium' fontSize='xsmall'>Payment Date</ThemeText>
             </View>
             <View style={style.value}>
-            <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall' fontColor='other'>2024.12.11</ThemeText>
+            <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall' fontColor='other'>{payment.paymentDate}</ThemeText>
             </View>
         </View>
 
@@ -45,7 +48,7 @@ const PaymentHistoryCard = () => {
                 <ThemeText fontType='primary' fontStyle='medium' fontSize='xsmall'>Payment Validity</ThemeText>
             </View>
             <View style={style.value}>
-            <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall' fontColor='other'>Expire</ThemeText>
+            <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall' fontColor='other'>{payment.validity?"Valid":"Expired"}</ThemeText>
             </View>
         </View>
 
@@ -54,7 +57,7 @@ const PaymentHistoryCard = () => {
                 <ThemeText fontType='primary' fontStyle='medium' fontSize='xsmall'>Expire Date</ThemeText>
             </View>
             <View style={style.value}>
-            <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall' fontColor='other'>2025.04.02</ThemeText>
+            <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall' fontColor='other'>{payment.expirayDate}</ThemeText>
             </View>
         </View>
 
@@ -66,7 +69,8 @@ export default PaymentHistoryCard
 
 const style=StyleSheet.create({
     mainContainer:{
-        width:getWidthPercentage(370),
+        marginTop:10,
+        width:getWidthPercentage(355),
         height:getHeightPercentage(200),
         gap:10,
         borderRadius:20,
@@ -77,8 +81,6 @@ const style=StyleSheet.create({
         flexDirection:"row",
         justifyContent:"flex-start",
         gap:40,
-        // marginLeft:getWidthPercentage(10),
-        // marginRight:getWidthPercentage(10)
     },
     key:{
         justifyContent:"flex-start",

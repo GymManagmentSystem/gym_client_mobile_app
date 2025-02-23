@@ -2,5 +2,6 @@ interface Payments{
     packageType:string,
     paymentTime:string,
     paymentDate:string,
-    expireDate:string,
+    expirayDate:string,
+    validity:boolean
 }
