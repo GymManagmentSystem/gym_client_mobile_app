@@ -12,6 +12,7 @@ interface ExerciseTrackingCardProps {
   sets?: number;
   reps?: string;
   exerciseUrl: string;
+  completedSets:number
 }
 
 const ExerciseTrackingCard = ({
@@ -19,6 +20,7 @@ const ExerciseTrackingCard = ({
   sets,
   reps,
   exerciseUrl,
+  completedSets,
 }: ExerciseTrackingCardProps) => {
   const theme = useTheme();
   const exerciseDetails = useScheduleExerciseStore();
@@ -111,7 +113,7 @@ const ExerciseTrackingCard = ({
             </View>
             <View style={style.setsConatiner}>
               {Array.from({length: sets}, (_, index) => (
-                <ExerciseSetTickBox key={index} exerciseName={exerciseName} />
+                <ExerciseSetTickBox key={index} exerciseName={exerciseName} index={index+1}/>
               ))}
             </View>
           </View>

@@ -91,7 +91,7 @@ const LoginScreen = () => {
 
   const saveLastLoginDate = async () => {
     try {
-      // await AsyncStorage.removeItem('lastLoginDate');
+      //await AsyncStorage.removeItem('lastLoginDate');
       const lastLoginDate = await AsyncStorage.getItem('lastLoginDate');
       const today = new Date().toLocaleDateString('en-CA');
       
