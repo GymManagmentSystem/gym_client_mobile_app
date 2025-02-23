@@ -160,6 +160,7 @@ const TrackScheduleScreen = () => {
               sets={exercise.sets}
               reps={exercise.reps}
               exerciseUrl={exercise.exerciseUrl}
+              completedSets={exercise.completedSets}
             />
           ))}
       </ScrollView>
