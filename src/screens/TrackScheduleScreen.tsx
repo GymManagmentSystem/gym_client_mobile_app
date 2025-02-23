@@ -182,7 +182,7 @@ const style = StyleSheet.create({
     marginTop: 20,
   },
   progressBarContainer: {
-    marginTop: 40,
+    marginTop: 25,
   },
   ProgressBarTitleContainer: {
     display: 'flex',
@@ -212,7 +212,7 @@ const style = StyleSheet.create({
     height: 13,
   },
   exerciseContainer: {
-    marginTop: 10,
+    marginTop: 15,
   },
   noScheduleContainer: {
     marginTop: getHeightPercentage(60),
