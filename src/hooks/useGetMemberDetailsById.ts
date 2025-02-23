@@ -13,8 +13,6 @@ interface ErrorResponse{
 
 
 
-
-
 const useGetMemberDetailsById=(memberId:number)=>{
 
 
