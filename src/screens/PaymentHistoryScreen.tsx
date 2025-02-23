@@ -5,6 +5,7 @@ import ExerciseTimer from '../components/ExerciseTimer'
 import ProgressCircle from '../components/ProgressCircle'
 import { getHeightPercentage, getWidthPercentage } from '../utility/Dimensions'
 import ThemeText from '../components/ThemeText'
+import PaymentHistoryCard from '../components/PaymentHistoryCard'
 
 
 
@@ -16,6 +17,7 @@ const PaymentHistoryScreen = () => {
         <ThemeText fontType='primary' fontStyle='medium' fontSize='medium'>Payments</ThemeText>
         <ThemeText fontType='primary' fontStyle='regular' fontSize='xsmall'>Your payment History</ThemeText>
       </View>
+      <PaymentHistoryCard/>
     </View>
   )
 }
