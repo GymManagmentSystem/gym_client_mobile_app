@@ -12,9 +12,6 @@ const useGetPayments=(memberId:number)=>{
     const getPayments=async ()=>{
         try{
             const response=await axiosInstance.get<Response>(`/payments/${memberId}`)
-            if(response.data.data != null){
-                return response.data.data
-            }
             return response.data.dataList
         }catch(e:any){
             if (e.response) {
@@ -27,7 +24,7 @@ const useGetPayments=(memberId:number)=>{
         }
     }
 
-    return useQuery<Payments[]|Payments,Error>({
+    return useQuery<Payments[],Error>({
         queryKey:['payments',memberId],
         queryFn:getPayments
     })
