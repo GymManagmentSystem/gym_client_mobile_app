@@ -5,14 +5,15 @@ import useGetMemberDetailsById from '../hooks/useGetMemberDetailsById';
 import usePostProfileImage from '../hooks/usePostProfileImage';
 import pickImage from '../utility/PickImage';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useQueryClient } from '@tanstack/react-query';
 
 
 const ProfileImageComponent = () => {
   const {loggedMmeberId}=useUserDataStore()
-  const {data:memberDeatails,}=useGetMemberDetailsById(loggedMmeberId)
   const [imageUri,setImageUri]=useState<string |null>(null);
-
   const useProfileImage=usePostProfileImage();
+
+  const queryClient=useQueryClient();
 
 
   const handlePickImage = async (fromCamera = false) => {
@@ -26,7 +27,6 @@ const ProfileImageComponent = () => {
     }
   };
 
-  console.log(memberDeatails)
 
   const uploadImage = (image: any) => {
     const formData = new FormData();
@@ -35,10 +35,11 @@ const ProfileImageComponent = () => {
         type: image.type,
         name: image.fileName || `profile_${Date.now()}.jpg`,
     });
-
-    useProfileImage.mutate({memberId:loggedMmeberId,profileImage: formData});
-
-    
+    useProfileImage.mutate({memberId:loggedMmeberId,profileImage: formData},{
+        onSuccess:(data)=>{
+            queryClient.invalidateQueries(['memberDetailsById',loggedMmeberId])
+        }
+    });
 };
 
   return (
