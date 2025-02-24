@@ -1,5 +1,12 @@
-import React, {useState} from 'react';
-import {Button, Image, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import useGetMemberDetailsById from '../hooks/useGetMemberDetailsById';
 import useUserDataStore from '../store/userDetailStore';
 import {useTheme} from '../context/ThemeContext';
@@ -9,38 +16,16 @@ import ProfileImageComponent from '../components/ProfileImageComponent';
 import {getHeightPercentage, getWidthPercentage} from '../utility/Dimensions';
 import ThemeText from '../components/ThemeText';
 import TextViewContainer from '../components/TextViewContainer';
+import PrimaryButton from '../components/PrimaryButton';
 
 const ProfileScreen = () => {
   const theme = useTheme();
   const {loggedMmeberId} = useUserDataStore();
-  const {data: memberDeatails} = useGetMemberDetailsById(loggedMmeberId);
-  const [imageUri, setImageUri] = useState<string | null>(null);
-
-  const useProfileImage = usePostProfileImage();
-
-  const handlePickImage = async (fromCamera = false) => {
-    try {
-      const image: any = await pickImage(fromCamera);
-      setImageUri(image.uri);
-      console.log(image.uri);
-      uploadImage(image);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  console.log(memberDeatails);
-
-  const uploadImage = (image: any) => {
-    const formData = new FormData();
-    formData.append('file', {
-      uri: image.uri,
-      type: image.type,
-      name: image.fileName || `profile_${Date.now()}.jpg`,
-    });
-
-    useProfileImage.mutate({memberId: loggedMmeberId, profileImage: formData});
-  };
+  const {
+    data: memberDeatails,
+    error,
+    isLoading,
+  } = useGetMemberDetailsById(loggedMmeberId);
 
   return (
     <View
@@ -53,16 +38,58 @@ const ProfileScreen = () => {
           Profile
         </ThemeText>
       </View>
-      <View style={style.profilePictureContainer}>
-        <ThemeText fontType="primary" fontStyle="medium" fontSize="medium" fontColor='other'>Nethupama Shavinda</ThemeText>
-        <ProfileImageComponent />
-      </View>
-      <View style={{gap:20}}>
-        <TextViewContainer/>
-        <TextViewContainer/>
-        <TextViewContainer/>
-        <TextViewContainer/>
-      </View>
+      {memberDeatails ? (
+        <View>
+          <View style={style.profilePictureContainer}>
+            <ThemeText
+              fontType="primary"
+              fontStyle="medium"
+              fontSize="medium"
+              fontColor="other">
+              Nethupama Shavinda
+            </ThemeText>
+            <ProfileImageComponent imageUrl={memberDeatails.profileImageUrl} />
+          </View>
+          <View style={style.userDataConatiner}>
+            <TextViewContainer
+              label="User Name"
+              value={memberDeatails.firstName + ' ' + memberDeatails.lastName}
+            />
+            <TextViewContainer
+              label="Email Address"
+              value={memberDeatails.email}
+            />
+            <TextViewContainer
+              label="Contact Number"
+              value={memberDeatails.contactNumber}
+            />
+            <TextViewContainer label="Age" value={memberDeatails.age} />
+          </View>
+
+          <View style={style.passwordResetTextButtonConatiner}>
+            <TouchableOpacity>
+              <ThemeText
+                fontType="secondary"
+                fontSize="xsmall"
+                fontStyle="regular">
+                Reset Password
+              </ThemeText>
+            </TouchableOpacity>
+            <Image
+              source={require('../../assets/icons/resetPasswordIcon.png')}
+              style={style.imageIcon}
+            />
+          </View>
+
+          <View style={style.buttonContainer}>
+            <PrimaryButton
+              title="Log Out"
+              titleFontColor="primary"
+              onHandle={() => console.log('hi')}
+            />
+          </View>
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -78,12 +105,29 @@ const style = StyleSheet.create({
   headingTextContainer: {
     marginTop: getHeightPercentage(20),
   },
-  profilePictureContainer:{
-    marginTop:getHeightPercentage(10),
-    display:"flex",
-    flexDirection:"column",
-    alignItems:"center",
-    gap:10
-  }
-
+  profilePictureContainer: {
+    marginTop: getHeightPercentage(10),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 10,
+  },
+  userDataConatiner: {
+    marginTop: 20,
+    gap: 10,
+  },
+  passwordResetTextButtonConatiner: {
+    marginTop: getHeightPercentage(15),
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 5,
+  },
+  imageIcon: {
+    width: 15,
+    height: 15,
+  },
+  buttonContainer: {
+    marginTop: getHeightPercentage(20),
+  },
 });

@@ -8,9 +8,13 @@ import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useQueryClient } from '@tanstack/react-query';
 
 
-const ProfileImageComponent = () => {
+interface ProfileImageComponentProp{
+    imageUrl:string|null
+}
+
+const ProfileImageComponent = ({imageUrl}:ProfileImageComponentProp) => {
   const {loggedMmeberId}=useUserDataStore()
-  const [imageUri,setImageUri]=useState<string |null>(null);
+  const [imageUri,setImageUri]=useState<string |null>(imageUrl);
   const useProfileImage=usePostProfileImage();
 
   const queryClient=useQueryClient();
