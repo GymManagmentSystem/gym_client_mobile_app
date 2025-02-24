@@ -5,6 +5,7 @@ import useUserDataStore from '../store/userDetailStore'
 import { useTheme } from '../context/ThemeContext'
 import pickImage from '../utility/PickImage'
 import usePostProfileImage from '../hooks/usePostProfileImage'
+import ProfileImageComponent from '../components/ProfileImageComponent'
 
 
 
@@ -47,14 +48,15 @@ const ProfileScreen = () => {
 
   return (
     <View style={{flex:1,backgroundColor:theme.colors.background.primary}}>
-      <View>
+      <ProfileImageComponent/>
+      {/* <View>
             <Image
                 source={imageUri ? { uri: imageUri } : require('../../assets/images/defaultProfile.jpg')}
                 style={{ width: 100, height: 100, borderRadius: 50 }}
             />
             <Button title="Pick from Gallery" onPress={() => handlePickImage(false)} />
             <Button title="Take a Photo" onPress={() => handlePickImage(true)} />
-        </View>
+        </View> */}
     </View>
   )
 }

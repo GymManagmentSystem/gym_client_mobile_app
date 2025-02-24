@@ -23,7 +23,7 @@ const BottomStackNavigation = () => {
 
   return (
     <Tab.Navigator
-    initialRouteName='HomeScreen'
+    initialRouteName='ProfileScreen'
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
