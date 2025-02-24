@@ -5,17 +5,21 @@ import ThemeText from './ThemeText'
 import { useTheme } from '../context/ThemeContext'
 import { getHeightPercentage, getWidthPercentage } from '../utility/Dimensions'
 
+interface TextViewContainerProp{
+    label:string
+    value:string|number
+}
 
-const TextViewContainer = () => {
+const TextViewContainer = ({label,value}:TextViewContainerProp) => {
     const theme=useTheme()
 
 
 
   return (
     <View style={style.textConatiner}>
-        <ThemeText fontType='secondary' fontStyle='regular' fontSize='medium'>User Name</ThemeText>
+        <ThemeText fontType='secondary' fontStyle='regular' fontSize='medium'>{label}</ThemeText>
         <View style={[style.valueContainer,{backgroundColor:theme.colors.background.secondary}]}>
-            <ThemeText fontType='secondary' fontStyle='regular' fontSize='small'>Nethupama Shavinda</ThemeText>
+            <ThemeText fontType='secondary' fontStyle='regular' fontSize='small'>{value}</ThemeText>
         </View>
     </View>
   )
