@@ -4,7 +4,9 @@ import { Member } from "../interfaces/Member";
 import { useQuery } from "@tanstack/react-query";
 
 interface SuccessResponse{
-    data:Member
+    data:{
+        member:Member
+    }
 }
 
 interface ErrorResponse{
@@ -19,7 +21,7 @@ const useGetMemberDetailsById=(memberId:number)=>{
     const getMemberDetails=async()=>{
         try{
             const result=await axiosInstance.get<SuccessResponse>(`/members/${memberId}`);
-            return result.data.data
+            return result.data.data.member
         }catch(e){
             if(e instanceof AxiosError){
                 const error=((e.response?.data) as ErrorResponse).errorMessage||"Request failed"

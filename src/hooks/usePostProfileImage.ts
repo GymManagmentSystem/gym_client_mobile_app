@@ -23,7 +23,8 @@ const usePostProfileImage = () => {
                const {data}=await axiosInstance.post<SuccessResponse>(`/members/${memberId}/uploadFile`,profileImage,{
                 headers: {
                     'Content-Type': 'multipart/form-data', // ✅ Allow FormData handling
-                }
+                },
+                timeout:30000
                })
                return data;
            }catch(e){
