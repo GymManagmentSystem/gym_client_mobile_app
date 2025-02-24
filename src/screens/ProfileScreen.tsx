@@ -10,22 +10,31 @@ import {
 import useGetMemberDetailsById from '../hooks/useGetMemberDetailsById';
 import useUserDataStore from '../store/userDetailStore';
 import {useTheme} from '../context/ThemeContext';
-import pickImage from '../utility/PickImage';
-import usePostProfileImage from '../hooks/usePostProfileImage';
 import ProfileImageComponent from '../components/ProfileImageComponent';
 import {getHeightPercentage, getWidthPercentage} from '../utility/Dimensions';
 import ThemeText from '../components/ThemeText';
 import TextViewContainer from '../components/TextViewContainer';
 import PrimaryButton from '../components/PrimaryButton';
+import CustomModal from '../modals/CustomModal';
+import LoadingActivityIndicator from '../modals/LoadingActivityIndicator';
 
 const ProfileScreen = () => {
   const theme = useTheme();
   const {loggedMmeberId} = useUserDataStore();
+  const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
   const {
     data: memberDeatails,
     error,
     isLoading,
   } = useGetMemberDetailsById(loggedMmeberId);
+
+  useEffect(() => {
+    if (error) {
+      setShowErrorModal(true);
+    }
+  }, [error]);
+
+  console.log(memberDeatails?.firstName)
 
   return (
     <View
@@ -33,6 +42,20 @@ const ProfileScreen = () => {
         style.mainContainer,
         {backgroundColor: theme.colors.background.primary},
       ]}>
+      <View>
+        <CustomModal
+          message={error?.message || 'unexpected error'}
+          modalType="error"
+          visibility={showErrorModal}
+          onClick={() => {
+            setShowErrorModal(false);
+          }}
+        />
+        <LoadingActivityIndicator
+          title="Loading Member Details..."
+          visibility={isLoading}
+        />
+      </View>
       <View style={style.headingTextContainer}>
         <ThemeText fontType="primary" fontStyle="medium" fontSize="medium">
           Profile
