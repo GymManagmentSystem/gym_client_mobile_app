@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ThemeText from '../components/ThemeText';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
@@ -15,6 +21,7 @@ import useLogin from '../hooks/useLogin';
 import CustomModal from '../modals/CustomModal';
 import useUserDataStore from '../store/userDetailStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getHeightPercentage } from '../utility/Dimensions';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   MainStackNavigationList,
@@ -58,7 +65,7 @@ const LoginScreen = () => {
     control,
     handleSubmit,
     formState: {errors},
-    reset
+    reset,
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
@@ -96,21 +103,19 @@ const LoginScreen = () => {
       //await AsyncStorage.removeItem('lastLoginDate');
       const lastLoginDate = await AsyncStorage.getItem('lastLoginDate');
       const today = new Date().toLocaleDateString('en-CA');
-      
 
       if (lastLoginDate === null) {
-        console.log("Last login date is null")
+        console.log('Last login date is null');
         await AsyncStorage.setItem('lastLoginDate', today);
         userDataStore.setFirstUserLogin(true);
       } else if (lastLoginDate !== today) {
         await AsyncStorage.setItem('lastLoginDate', today);
         userDataStore.setFirstUserLogin(true);
         console.log('new day has begin');
-      }else{
+      } else {
         userDataStore.setFirstUserLogin(false);
-        console.log("last login  date is ",lastLoginDate);
+        console.log('last login  date is ', lastLoginDate);
       }
-     
     } catch (e) {
       setModalMessage('Some thing went wrong');
       setErrorModalVisibility(true);
@@ -140,6 +145,15 @@ const LoginScreen = () => {
         <ThemeText fontType="primary" fontStyle="regular" fontSize="small">
           Log into your account
         </ThemeText>
+      </View>
+
+      <View style={style.middleContainer}>
+        <View style={style.imageContainer}>
+          <Image
+            source={require('../../assets/images/gymLoginImage.png')}
+            style={style.image}
+          />
+        </View>
       </View>
 
       <View>
@@ -209,20 +223,33 @@ const style = StyleSheet.create({
   topContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 45,
+    marginTop: getHeightPercentage(25),
+  },
+  middleContainer:{
+    marginTop:getHeightPercentage(40),
+    alignItems: 'center'
+  },
+  imageContainer:{
+    width: 200,
+    height: 200,
+    borderRadius: 100
+  },
+  image:{
+    width: '100%',
+    height: '100%'
   },
   inputContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 65,
+    marginTop: getHeightPercentage(30),
   },
   buttonContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 160,
+    marginTop: getHeightPercentage(100),
   },
   textButtonContainer: {
-    marginTop: 27,
+    marginTop: getHeightPercentage(27),
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
