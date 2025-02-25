@@ -132,7 +132,7 @@ const ProfileScreen = () => {
             <PrimaryButton
               title="Log Out"
               titleFontColor="primary"
-              onHandle={() => console.log('hi')}
+              onHandle={() => logoutProcess()}
             />
           </View>
         </View>
