@@ -22,7 +22,7 @@ const MainStackNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="BottomStackScreens">
+      initialRouteName="LoginScreen">
       <Stack.Screen name="LoginScreen" component={LoginScreen}></Stack.Screen>
       <Stack.Screen
         name="EmailVerficationScreen"
