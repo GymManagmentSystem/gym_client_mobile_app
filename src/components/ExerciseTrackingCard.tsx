@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {getHeightPercentage, getWidthPercentage} from '../utility/Dimensions';
 import ThemeText from './ThemeText';
 import {useTheme} from '../context/ThemeContext';
@@ -12,7 +12,7 @@ interface ExerciseTrackingCardProps {
   sets?: number;
   reps?: string;
   exerciseUrl: string;
-  completedSets:number
+  onImageClick:()=>void
 }
 
 const ExerciseTrackingCard = ({
@@ -20,7 +20,7 @@ const ExerciseTrackingCard = ({
   sets,
   reps,
   exerciseUrl,
-  completedSets,
+  onImageClick
 }: ExerciseTrackingCardProps) => {
   const theme = useTheme();
   const exerciseDetails = useScheduleExerciseStore();
@@ -129,12 +129,14 @@ const ExerciseTrackingCard = ({
             borderLeftWidth: 2,
           },
         ]}>
+        <TouchableOpacity onPress={()=>onImageClick()}>
         <Image
           source={{
             uri: exerciseUrl,
           }}
           style={style.image}
         />
+          </TouchableOpacity>  
       </View>
     </View>
   );
