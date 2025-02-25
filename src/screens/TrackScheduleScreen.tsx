@@ -1,12 +1,9 @@
-import {useQueryClient} from '@tanstack/react-query';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import useUserDataStore from '../store/userDetailStore';
 import ExerciseTrackingCard from '../components/ExerciseTrackingCard';
 import {getHeightPercentage, getWidthPercentage} from '../utility/Dimensions';
 import {useTheme} from '../context/ThemeContext';
 import {useScheduleExerciseStore} from '../store/useTodayScheduleStore';
-import {ScheduleExercise} from '../interfaces/currentSchedules';
 import {TrackedExercise} from '../interfaces/TrackedExercise';
 import ThemeText from '../components/ThemeText';
 import ProgressCircle from '../components/ProgressCircle';
