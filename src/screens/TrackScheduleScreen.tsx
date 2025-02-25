@@ -9,10 +9,22 @@ import ThemeText from '../components/ThemeText';
 import ProgressCircle from '../components/ProgressCircle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LocalStoredExercise} from '../interfaces/LocalStoredExercise';
+import { ScheduleStackNavigation } from '../navigation/stackNavigation/ScheduleStackNavigation';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+
+
+type TrackScheduleScreenNavigationProp = NativeStackNavigationProp<
+  ScheduleStackNavigation,
+  'TrackScheduleScreen'
+  
+>;
 
 const TrackScheduleScreen = () => {
   const theme = useTheme();
   const exerciseDetailStore = useScheduleExerciseStore();
+  const navigation=useNavigation<TrackScheduleScreenNavigationProp>();
   const [todaySchedule, setTodaySchedule] = useState<LocalStoredExercise[]>([]);
   const [scheduleAvailability, setScheduleAvailbility] =
     useState<boolean>(false);
@@ -38,6 +50,8 @@ const TrackScheduleScreen = () => {
       return [];
     }
   };
+
+  
 
   const loadSchedule = async () => {
     console.log("load schedule function start")
@@ -157,7 +171,8 @@ const TrackScheduleScreen = () => {
               sets={exercise.sets}
               reps={exercise.reps}
               exerciseUrl={exercise.exerciseUrl}
-              completedSets={exercise.completedSets}
+              onImageClick={()=>navigation.navigate("ExerciseDeatailsScreen",{exerciseName:exercise.exerciseName})}
+            
             />
           ))}
       </ScrollView>
