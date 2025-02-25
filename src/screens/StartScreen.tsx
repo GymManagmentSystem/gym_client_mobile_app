@@ -27,7 +27,7 @@ const StartScreen = () => {
       <View style={style.buttonContainer}>
         <PrimaryButton
           title="START YOUR FITNESS ADVENTURE"
-          titleFontColor="secondary"
+          titleFontColor="tertiory"
           onHandle={() => {
             navigation.navigate('LoginScreen');
           }}

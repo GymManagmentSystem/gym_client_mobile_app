@@ -7,6 +7,7 @@ import ChangePasswordScreen from '../../screens/ChangePasswordScreen';
 import SuccessPasswordResetScreen from '../../screens/SuccessPasswordResetScreen';
 import BottomStackNavigation from '../bottomStackNavigation/BottomStackNavigation';
 import StartScreen from '../../screens/StartScreen';
+import { useTheme } from '../../context/ThemeContext';
 
 export type MainStackNavigationList = {
   StartScreen: undefined;
@@ -20,10 +21,13 @@ export type MainStackNavigationList = {
 };
 
 const MainStackNavigation = () => {
+
+  const theme=useTheme()
+
   const Stack = createNativeStackNavigator<MainStackNavigationList>();
   return (
     <Stack.Navigator
-      screenOptions={{headerShown: false}}
+      screenOptions={{headerShown: false,statusBarColor:theme.colors.background.highlight}}
       initialRouteName="StartScreen">
       <Stack.Screen name="StartScreen" component={StartScreen}></Stack.Screen>
       <Stack.Screen name="LoginScreen" component={LoginScreen}></Stack.Screen>
