@@ -12,7 +12,7 @@ const ScheduleStackNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="ExerciseDeatailsScreen">
+      initialRouteName="TrackScheduleScreen">
       <Stack.Screen
         name="TrackScheduleScreen"
         component={TrackScheduleScreen}></Stack.Screen>

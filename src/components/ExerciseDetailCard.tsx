@@ -4,50 +4,54 @@ import { useTheme } from '../context/ThemeContext'
 import { getHeightPercentage, getWidthPercentage } from '../utility/Dimensions';
 import ThemeText from './ThemeText';
 import ForgotPasswordScreenHeader from './ForgotPasswordScreenHeader';
+import { Exercise } from '../interfaces/Exercise';
 
 interface ExerciseDetailCardProps{
+    exercise:Exercise
     navigateBack:()=>void
 }
 
 
 
-const ExerciseDetailCard = ({navigateBack}:ExerciseDetailCardProps) => {
+
+
+const ExerciseDetailCard = ({exercise,navigateBack}:ExerciseDetailCardProps) => {
     const theme=useTheme();
   return (
     <View style={{backgroundColor:theme.colors.background.primary}}>
         <ForgotPasswordScreenHeader
-                title="Bench Press"
+                title={exercise.exerciseName}
                 navigateBack={() => navigateBack()}
               />
         <View style={[style.exerciseDetailContainer,{backgroundColor:theme.colors.background.secondary}]}>
             <View style={style.imageConatiner}>
-                <Image source={{uri:"https://as1.ftcdn.net/v2/jpg/04/53/40/94/1000_F_453409408_coVYgCOcJRye3159FO5ywT7TnPfPCh3l.jpg"}} style={style.image}/>
+                <Image source={{uri:exercise.exerciseImageUrl}} style={style.image}/>
             </View>
             <View style={style.exerciseContainer}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={style.KeyValueContainer}>
                     <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular' style={style.keyContainer}>Exercise Type</ThemeText>
-                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>Strength</ThemeText>
+                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>{exercise.exerciseType}</ThemeText>
                 </View>
                 <View style={style.KeyValueContainer}>
                     <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular' style={style.keyContainer}>Target Body Area</ThemeText>
-                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>Strength</ThemeText>
+                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>{exercise.targetBodyArea}</ThemeText>
                 </View>
                 <View style={style.KeyValueContainer}>
                     <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular' style={style.keyContainer}>Exercise Level</ThemeText>
-                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>Strength</ThemeText>
+                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>{exercise.exerciseLevel}</ThemeText>
                 </View>
                 <View style={style.KeyValueContainer}>
                     <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular' style={style.keyContainer}>Exercise Category</ThemeText>
-                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>Strength</ThemeText>
+                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>{exercise.exerciseCategory}</ThemeText>
                 </View>
                 <View style={style.KeyValueContainer}>
                     <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular' style={style.keyContainer}>Equipment Required</ThemeText>
-                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>Strength</ThemeText>
+                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular'>{exercise.exerciseEquipment}</ThemeText>
                 </View>
                 <View style={style.KeyValueContainer}>
                     <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular' style={style.keyContainer}>Exercise Description</ThemeText>
-                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular' style={style.descriptionText} >The Bench Press is a fundamental strength exercise that targets the chest, shoulders, and triceps</ThemeText>
+                    <ThemeText fontType='primary' fontSize='xsmall' fontStyle='regular' style={style.descriptionText} >{exercise.exerciseDescription}</ThemeText>
                 </View>
             </ScrollView>
             </View>
