@@ -17,16 +17,27 @@ import TextViewContainer from '../components/TextViewContainer';
 import PrimaryButton from '../components/PrimaryButton';
 import CustomModal from '../modals/CustomModal';
 import LoadingActivityIndicator from '../modals/LoadingActivityIndicator';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {MainStackNavigationList} from '../navigation/stackNavigation/MainStackNavigation';
+import {useNavigation} from '@react-navigation/native';
+import axiosInstance from '../api/AxiosInstance';
+
+type profileScreenNavigationProp = NativeStackNavigationProp<
+  MainStackNavigationList,
+  'BottomStackScreens'
+>;
 
 const ProfileScreen = () => {
   const theme = useTheme();
-  const {loggedMmeberId} = useUserDataStore();
+
+  const navigation = useNavigation<profileScreenNavigationProp>();
+  const userDataStore = useUserDataStore();
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
   const {
     data: memberDeatails,
     error,
     isLoading,
-  } = useGetMemberDetailsById(loggedMmeberId);
+  } = useGetMemberDetailsById(userDataStore.loggedMmeberId);
 
   useEffect(() => {
     if (error) {
@@ -34,7 +45,20 @@ const ProfileScreen = () => {
     }
   }, [error]);
 
-  console.log(memberDeatails?.firstName)
+  console.log(memberDeatails?.firstName);
+
+  const resetPasswordScreenNavigation = () => {
+    navigation.navigate('ResetPasswordScreen', {
+      userName: userDataStore.loggedUserName,
+    });
+  };
+
+  const logoutProcess = () => {
+    userDataStore.setLoggedMemberId(0);
+    userDataStore.setUserName('');
+    axiosInstance.defaults.headers.common['Authorization'] = null;
+    navigation.navigate('LoginScreen');
+  };
 
   return (
     <View
@@ -90,7 +114,7 @@ const ProfileScreen = () => {
           </View>
 
           <View style={style.passwordResetTextButtonConatiner}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => resetPasswordScreenNavigation()}>
               <ThemeText
                 fontType="secondary"
                 fontSize="xsmall"
