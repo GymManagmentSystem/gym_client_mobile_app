@@ -58,6 +58,7 @@ const LoginScreen = () => {
     control,
     handleSubmit,
     formState: {errors},
+    reset
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
@@ -71,6 +72,7 @@ const LoginScreen = () => {
         const memberType = parts[0].split(': ')[1];
         const memberId = parts[1].split(': ')[1];
         console.log(memberId, memberType);
+        reset();
         if (memberType === 'New Member') {
           setModalMessage('Reset your password at first Login');
           setPasswordResetSuccessModalVisibility(true);

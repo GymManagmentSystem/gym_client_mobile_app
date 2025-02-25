@@ -1,17 +1,17 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../../screens/HomeScreen';
-import {Image, View} from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
-import TrackScheduleScreen from '../../screens/TrackScheduleScreen';
 import PaymentHistoryScreen from '../../screens/PaymentHistoryScreen';
 import ProfileScreen from '../../screens/ProfileScreen';
 import TabIcon from '../../components/TabIcon';
 import { getHeightPercentage } from '../../utility/Dimensions';
+import ScheduleStackNavigation from '../stackNavigation/ScheduleStackNavigation';
+
 
 type BottomTabNavigationList = {
   HomeScreen: undefined;
-  TrackScheduleScreen: undefined;
+  ScheduleStackNavigation: undefined;
   PaymentHistoryScreen: undefined;
   ProfileScreen: undefined;
 };
@@ -39,8 +39,8 @@ const BottomStackNavigation = () => {
           icon: require('../../../assets/icons/homeIcon.png'),
         },
         {
-          name: 'TrackScheduleScreen',
-          component: TrackScheduleScreen,
+          name: 'ScheduleStackNavigation',
+          component:ScheduleStackNavigation,
           icon: require('../../../assets/icons/exerciseIcon.png'),
         },
         {
