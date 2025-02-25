@@ -6,8 +6,10 @@ import ResetPasswordScreen from '../../screens/ResetPasswordScreen';
 import ChangePasswordScreen from '../../screens/ChangePasswordScreen';
 import SuccessPasswordResetScreen from '../../screens/SuccessPasswordResetScreen';
 import BottomStackNavigation from '../bottomStackNavigation/BottomStackNavigation';
+import StartScreen from '../../screens/StartScreen';
 
 export type MainStackNavigationList = {
+  StartScreen: undefined;
   LoginScreen: undefined;
   EmailVerficationScreen: undefined;
   OtpVerificationScreen: {userName: string; email: string};
@@ -22,7 +24,8 @@ const MainStackNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="LoginScreen">
+      initialRouteName="StartScreen">
+      <Stack.Screen name="StartScreen" component={StartScreen}></Stack.Screen>
       <Stack.Screen name="LoginScreen" component={LoginScreen}></Stack.Screen>
       <Stack.Screen
         name="EmailVerficationScreen"
